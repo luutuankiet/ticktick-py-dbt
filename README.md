@@ -50,11 +50,13 @@ utilizes `lvl1_progress` model which aggregates all your tasks by project (lists
 to answer questons such as:
 - "what's the clarify / done progress of my lists?"
 - "what are some lists that need my attention / should be archived?"
+
 ![alt text](assets/README/image.png)
 
 #### level 2 : area of focus (folders of lists) 
 
 utilizes `lvl2_progress` model which aggregates all your lists by folder (area of focus) and find how how well you are progressing on your area of focus.
+
 ![alt text](assets/README/image-1.png)
 
 #### level 3 : 1-3 years goals
@@ -67,6 +69,15 @@ This combination can show a rough progress how you are doing with your 1-3 years
 
 #### level 4-5 : 
 This is outside of the scope of this project because metrics at this level are too coarse to be quantified. But, the previous levels should be enough as stepping stones to help you review this level.
+
+#### bonus : habit heatmap
+
+The `fact_todos` model comes with a built in windowing logic that detects & log streaks for repeating tasks. 
+
+With some dashboard wizardy you can create an [everyday](https://everyday.app/)-inspired habit heatmap:
+
+![image](https://github.com/user-attachments/assets/4923b7c7-af30-41c1-9931-90c4670a2b4f)
+
 
 
 ## Integrations
