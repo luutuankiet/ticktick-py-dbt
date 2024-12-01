@@ -1,0 +1,23 @@
+.venv
+.env
+
+
+__pycache__
+history/
+logs/
+storage/
+schedules/
+target/
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.ipynb
+
+seeds/list_goal_mapping.csv
+dbt_packages
+package-lock.json
+package.json
+
+dbt_project/seeds/*
