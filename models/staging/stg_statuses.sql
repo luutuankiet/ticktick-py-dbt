@@ -1,8 +1,8 @@
 WITH source AS (
     SELECT
-        {{coalesce_defaults(ref('src__tasks_raw'))}}
+        {{coalesce_defaults(ref('base_todos'))}}
     FROM
-        {{ref('src__tasks_raw')}}
+        {{ref('base_todos')}}
 ),
 renamed AS (
     SELECT

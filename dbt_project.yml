@@ -9,12 +9,12 @@ snapshot-paths: ["snapshots"]
 
 models:
   todo_analytics:
-    raw_source:
-      # utilizing the strat to allow deleting completed data from src ticktick
-      +tags: "raw"
     staging:
       +materialized: view
       +tags: "staging"
+      base:
+        # utilizing the strat to allow deleting completed data from src ticktick
+        +tags: "base"
     marts:
       core:
         +materialized: table

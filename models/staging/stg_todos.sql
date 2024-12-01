@@ -10,9 +10,9 @@ WITH init_todo AS (
     
 
     SELECT
-        DISTINCT {{ coalesce_defaults(ref('src__tasks_raw')) }}
+        DISTINCT {{ coalesce_defaults(ref('base_todos')) }}
     FROM
-        {{ ref('src__tasks_raw') }}
+        {{ ref('base_todos') }}
 ),
 _todo__recurring AS (
     -- handle flagging habits
@@ -96,7 +96,7 @@ _todo__habit_latest_wrapper AS (
         A.todo_derived__is_repeat,
         A._todo__habit_streak_bucket_id,
         A.todo_derived__habit_streak,
-        {{ dbt_utils.star(ref('src__tasks_raw'), relation_alias = 'A', except = ["todo_title", "todo_projectid" ]) }}
+        {{ dbt_utils.star(ref('base_todos'), relation_alias = 'A', except = ["todo_title", "todo_projectid" ]) }}
     FROM
         _todo__habit_streak A
         LEFT JOIN _todo__habit_streak b
@@ -109,7 +109,7 @@ todo_habit_stg AS (
         h.todo_derived__habit_streak,
         h._todo__habit_streak_bucket_id,
         r.todo_derived__is_repeat,
-        {{ dbt_utils.star(ref('src__tasks_raw'), relation_alias = 'r', except = ["todo_title", "todo_projectid" ]) }}
+        {{ dbt_utils.star(ref('base_todos'), relation_alias = 'r', except = ["todo_title", "todo_projectid" ]) }}
     FROM
         _todo__recurring r
         LEFT JOIN _todo__habit_latest_wrapper h
@@ -186,15 +186,15 @@ todo AS (
 ),
 lists AS (
     SELECT
-        {{ coalesce_defaults(ref('src__lists_raw')) }}
+        {{ coalesce_defaults(ref('base_lists')) }}
     FROM
-        {{ ref('src__lists_raw') }}
+        {{ ref('base_lists') }}
 ),
 folders AS (
     SELECT
-        {{ coalesce_defaults(ref('src__folders_raw')) }}
+        {{ coalesce_defaults(ref('base_folders')) }}
     FROM
-        {{ ref('src__folders_raw') }}
+        {{ ref('base_folders') }}
 ),
 statuses AS (
     SELECT

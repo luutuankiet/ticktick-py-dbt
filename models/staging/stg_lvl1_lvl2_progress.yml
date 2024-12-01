@@ -1,6 +1,6 @@
 version: 2
 models:
-  - name: lvl1_lvl2_progress
+  - name: stg_lvl1_lvl2_progress
     columns:
       - name: folder_name
         description: ""

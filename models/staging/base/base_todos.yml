@@ -1,6 +1,6 @@
 version: 2
 models:
-  - name: src__tasks_raw
+  - name: base_todos
     columns:
       - name: todo_id
         description: ""

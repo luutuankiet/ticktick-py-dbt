@@ -2,7 +2,7 @@ WITH source AS (
     SELECT
         *
     FROM
-        {{ ref('lvl1_lvl2_progress') }}
+        {{ ref('stg_lvl1_lvl2_progress') }}
 ),
 ref_seeds AS (
     SELECT

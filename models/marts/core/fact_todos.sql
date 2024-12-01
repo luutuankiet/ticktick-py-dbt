@@ -13,7 +13,6 @@ WITH source AS (
         *
     FROM
         {{ ref('stg_todos_join_lookahead') }}
-        where todo_modifiedtime is null
 )
 SELECT
     *

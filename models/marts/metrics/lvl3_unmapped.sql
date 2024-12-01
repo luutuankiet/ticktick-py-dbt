@@ -2,7 +2,7 @@ WITH source AS (
     SELECT
         *
     FROM
-        {{ ref('stg_duckdb__lvl3') }}
+        {{ ref('stg_lvl3') }}
 )
 SELECT
     *

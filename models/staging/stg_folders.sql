@@ -1,11 +1,11 @@
 WITH source AS (
     SELECT
          {{coalesce_defaults(ref(
-            'src__folders_raw'
+            'base_folders'
         ) )}}
     FROM
         {{ ref(
-            'src__folders_raw'
+            'base_folders'
         ) }}
 )
  

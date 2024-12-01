@@ -1,6 +1,6 @@
 version: 2
 models:
-  - name: src__lists_raw
+  - name: base_lists
     columns:
       - name: list_id
         description: ""

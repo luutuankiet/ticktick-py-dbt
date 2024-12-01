@@ -19,6 +19,8 @@
 
     "python.terminal.activateEnvironment": true,
     "terminal.integrated.inheritEnv": true,
+    "dbt.lineage.showNonSelectEdges": true,
+    "dbt.lineage.defaultExpansion": 2,
 
 
 

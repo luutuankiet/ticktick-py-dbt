@@ -1,17 +1,17 @@
 WITH lists AS (
     SELECT
-        {{ coalesce_defaults(ref('src__lists_raw')) }}
+        {{ coalesce_defaults(ref('base_lists')) }}
     FROM
         {{ ref(
-            'src__lists_raw'
+            'base_lists'
         ) }}
 ),
 todo AS (
     SELECT
-        {{ coalesce_defaults(ref('src__tasks_raw')) }}
+        {{ coalesce_defaults(ref('base_todos')) }}
     FROM
         {{ ref(
-            "src__tasks_raw"
+            "base_todos"
         ) }}
 ),
 list_created AS (

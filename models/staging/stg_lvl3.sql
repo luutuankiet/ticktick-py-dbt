@@ -14,7 +14,7 @@ goals AS (
     SELECT
         *
     FROM
-        {{ ref('init_duckdb__lvl3') }}
+        {{ ref('base_lvl3') }}
 ),
 unmapped AS (
     SELECT
