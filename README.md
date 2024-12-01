@@ -78,6 +78,11 @@ With some dashboard wizardy you can create an [everyday](https://everyday.app/)-
 
 ![image](https://github.com/user-attachments/assets/4923b7c7-af30-41c1-9931-90c4670a2b4f)
 
+The gist of this dashboard is to help tracking your habits habit (which I took from the [atomic habit](https://www.goodreads.com/book/show/40121378-atomic-habits) book)
+- first step to build habit is commit to showing up - in the first couple recurrences aim to spend 2 minutes with it and you're good for the day
+- falling to check in repeatedly also builds up a habit. if you see yourself building this bad habit, try to aim to show up for 2 minutes first to break the chain
+- roll with the punches - if you find it hard to keep up with a habit, maybe it's not meant for ya, time to discard it
+
 
 
 ## Integrations
@@ -93,14 +98,20 @@ With some dashboard wizardy you can create an [everyday](https://everyday.app/)-
 ### quickstart
 - clone the repo and cd into it.
 - install the pip requirements : 
-`python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt`
+```
+python -m venv .venv &&\
+source .venv/bin/activate &&\
+pip install -r requirements.txt
+```
 - create a seed file `list_goal_mapping.csv` from the example `list_goal_mapping_sample.csv`. 
-  - You can use the sample file content to quickstart the initial run. `
+  - You can use the sample file content to quickstart the initial run.
   - This should affect models with `lvl_` prefix. `fact_todos` and `obt` models should run fine without it.
 - build your dbt project : `dbt deps & dbt build`
 
 ## future work
 - [ ] detailed models documentations. there's a lot going on with `facts_todo` that needs to be documented other gets confusing why the logics are the way they are.
+- [ ] document the objects used from ticktick-py used as source for the models (tasks, lists, folders). Also identify the additional derived fields from the source.
+- [ ] document specific tags and ticktick lists setup that the lvl1 > 3 models expect
 - [ ] how to run the project by individual GTD levels instead of 1 > 3 as a whole.
 - [ ] ability to opt out of dummy lookahead records in `fact_todos` model.
 - [ ] correct handling of raw data in json and array type; currently all are treated as strings.
