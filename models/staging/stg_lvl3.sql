@@ -1,3 +1,10 @@
+{% set seed_table_name = 'list_goal_mapping' %}
+
+{% if target.name == "ci" %}
+    {% set seed_table_name = seed_table_name + '_sample' %}
+{% endif %}
+
+
 WITH MAP AS (
     SELECT
         *,
@@ -8,7 +15,7 @@ WITH MAP AS (
             )
         ) AS goal
     FROM
-        {{ ref('list_goal_mapping') }}
+    {{ ref(seed_table_name) }}
 ),
 goals AS (
     SELECT
@@ -20,7 +27,7 @@ unmapped AS (
     SELECT
         *
     FROM
-        {{ ref("list_goal_mapping") }}
+        {{ ref(seed_table_name) }}
     WHERE
         goals IS NULL
 ),

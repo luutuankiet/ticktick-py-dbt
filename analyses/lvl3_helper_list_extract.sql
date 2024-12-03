@@ -1,3 +1,11 @@
+{% set seed_table_name = 'list_goal_mapping' %}
+
+{% if target.name == "ci" %}
+    {% set seed_table_name = seed_table_name + '_sample' %}
+{% endif %}
+
+
+
 WITH source AS (
     SELECT
         *
@@ -8,7 +16,7 @@ ref_seeds AS (
     SELECT
         *
     FROM
-        {{ ref('list_goal_mapping') }}
+        {{ ref(seed_table_name) }}
 ),
 new_seeds AS (
     SELECT
