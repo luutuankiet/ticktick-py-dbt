@@ -1,0 +1,67 @@
+name: slim_CI
+
+# for slim CIs all dbt and lightdash runs are built on dev schema; just need to overwrite TARGET_SCHEMA env which lives in the PROD_ENV secret.
+on:
+  push:
+    branches-ignore: [ "main", "master"]
+
+
+jobs:
+  validate_dbt_models:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: 8BitJonny/gh-get-current-pr@3.0.0
+        id: PR
+
+      - name: Set var PR_schema
+        run: echo "PR_schema=${{ env.schema_var }}" >> $GITHUB_ENV
+        if: ${{ steps.PR.outputs.pr_found == 'true' }}
+        env:
+          schema_var: '{\"schema_name\": \"ci_PR_${{ steps.PR.outputs.number }}\"}'
+
+      - name: debug
+        run: echo "${{ env.PR_schema }}"
+        
+
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup-env
+        with: 
+          PROD_ENV: ${{ secrets.PROD_ENV }}           
+
+
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.local
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11.x"
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt
+          dbt deps
+
+      - name: Cache npm packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/npm
+            node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: dbt build models
+        run: dbt build --target ci --vars '${{env.PR_schema}}'
