@@ -262,7 +262,7 @@ FROM
 
 {% if is_incremental() %}
   WHERE 
-  todo_modifiedtime >= (select coalesce(max(todo_modifiedtime),'1900-01-01 00:00:00') from {{ this }} )
+  todo_completedtime >= todo_modifiedtime -- address this bug tasks completed dont get updated in modified time
   OR
-  todo_modifiedtime IS NULL
+  todo_modifiedtime >= (select coalesce(max(todo_modifiedtime),'1900-01-01 00:00:00') from {{ this }} )
 {% endif %}
