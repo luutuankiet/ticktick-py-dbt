@@ -1,4 +1,4 @@
-{% macro setup_textsearch() %}
+{% macro setup_textsearch(model) %}
   {% set sql %}
 {# setup for config #}
 {# drop the custom config #}
@@ -25,11 +25,11 @@ ALTER TEXT SEARCH CONFIGURATION english_nostop_cfg
   DROP FUNCTION IF EXISTS {{ env_var("TARGET_SCHEMA",'dev') }}.search_gtd;
 
 ALTER TABLE
-  {{ ref('fact_todos') }} DROP IF EXISTS search CASCADE;
+  {{this}} DROP IF EXISTS search CASCADE;
 
 
 ALTER TABLE
-  {{ ref('fact_todos') }}
+  {{this}}
   --add the search index
 ADD
   search tsvector generated always AS (
@@ -49,7 +49,7 @@ ADD
   ) STORED;
 -- add the index
   CREATE INDEX idx_search
-  ON {{ ref('fact_todos') }} USING gin(search);
+  ON {{this}} USING gin(search);
 -- create the func
   CREATE
   OR REPLACE FUNCTION {{ env_var("TARGET_SCHEMA",'dev') }}.search_gtd (
@@ -74,7 +74,7 @@ SELECT
   todo_duedate,
   ts_rank(search, websearch_to_tsquery('english', term)) + ts_rank(search, websearch_to_tsquery('simple', term)) AS RANK
 FROM
-  {{ ref('fact_todos') }}
+  {{this}}
 WHERE
   (search @@ websearch_to_tsquery('english', term)
   OR search @@ websearch_to_tsquery('simple', term)
