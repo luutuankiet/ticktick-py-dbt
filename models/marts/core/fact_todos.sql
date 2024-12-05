@@ -4,7 +4,10 @@
     unique_key = ['todo_lookahead_skey'],
     incremental_strategy = 'merge',
     on_schema_change='append_new_columns',
-    pre_hook = ['{{cleanup_nulls("todo_id")}}']
+    pre_hook = ['{{cleanup_nulls("todo_id")}}'],
+    post_hook = ["{% if not is_incremental() %} {{ setup_textsearch() }} {% endif %}"]
+
+    
 ) }}
 WITH source AS (
     SELECT
@@ -24,4 +27,3 @@ FROM
 OR
   todo_modifiedtime IS NULL
 {% endif %}
-
