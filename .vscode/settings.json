@@ -14,8 +14,8 @@
     "python.venvFolders": [
         "${workspaceFolder}/.venv"
     ],
-    "python.envFile": "${workspaceFolder}/.env",
-    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.envFile": "${workspaceFolder}/../.env",
+    "python.defaultInterpreterPath": "${workspaceFolder}/../.venv/bin/python",
 
     "python.terminal.activateEnvironment": true,
     "terminal.integrated.inheritEnv": true,
@@ -27,7 +27,7 @@
         "/**/.github/**/*.yml": "github-actions-workflow"
     },
     "terminal.integrated.environmentChangesRelaunch": true,
-    "dbt.dbtPythonPathOverride": "${workspaceFolder}/.venv/bin/python",
+    "dbt.dbtPythonPathOverride": "${workspaceFolder}/../.venv/bin/python",
 
 
     

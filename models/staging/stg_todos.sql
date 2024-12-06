@@ -256,13 +256,19 @@ joined AS (
 )
 SELECT
     {{ dbt_utils.generate_surrogate_key(['todo_id']) }} AS todo_key,
-    *
+    *,
+    {{dbt_date.now("Asia/Ho_Chi_Minh")}} as _modified_time
 FROM
     joined
 
 {% if is_incremental() %}
   WHERE 
-  todo_completedtime >= todo_modifiedtime -- address this bug tasks completed dont get updated in modified time
+  (-- address this bug tasks completed dont get updated in modified time
+    todo_completedtime >= todo_modifiedtime 
+    AND todo_completedtime::date >= {{dbt_date.n_days_ago(7)}}
+    )
   OR
+   todo_derived__is_repeat is True -- full refresh all habit tasks 
+  OR 
   todo_modifiedtime >= (select coalesce(max(todo_modifiedtime),'1900-01-01 00:00:00') from {{ this }} )
 {% endif %}

@@ -23,7 +23,8 @@ FROM
     source
 
 {% if is_incremental() %}
-  WHERE  todo_modifiedtime >= (select coalesce(max(todo_modifiedtime),'1900-01-01 00:00:00') from {{ this }} )
-OR
+  WHERE 
+  _modified_time >= (select coalesce(max(_modified_time),'1900-01-01 00:00:00') from {{ this }} )
+  OR
   todo_modifiedtime IS NULL
 {% endif %}
