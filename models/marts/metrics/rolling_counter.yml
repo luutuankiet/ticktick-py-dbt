@@ -1,0 +1,37 @@
+version: 2
+models:
+  - name: rolling_counter
+    meta:
+      joins:
+        - join: dim_statuses
+          type: inner
+          sql_on: ${rolling_counter.status_key} = ${dim_statuses.status_key}
+        - join: dim_dates
+          type: inner
+          sql_on: ${dim_dates.date_key} = ${rolling_counter.rolling_date_key}
+    columns:
+      - name: todo_id
+        description: ""
+        meta:
+          dimension:
+            type: string
+      - name: todo_title
+        description: ""
+        meta:
+          dimension:
+            type: string
+      - name: status_key
+        description: ""
+        meta:
+          dimension:
+            type: string
+      - name: rolling_date
+        description: ""
+        meta:
+          dimension:
+            type: date
+      - name: rolling_date_key
+        description: ""
+        meta:
+          dimension:
+            type: string
