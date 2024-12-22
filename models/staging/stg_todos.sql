@@ -1,6 +1,6 @@
 
 {{ config(
-    materialized='incremental',
+    materialized='table',
     unique_key = ['todo_id'],
     incremental_strategy = 'merge',
     on_schema_change='append_new_columns'

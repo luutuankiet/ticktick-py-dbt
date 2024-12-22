@@ -1,6 +1,6 @@
 {# had to hardcode the pre hook cause otherwise the old dummy lookahead dates gonn persist & build up #}
 {{ config(
-    materialized='incremental',
+    materialized='table',
     unique_key = ['todo_lookahead_skey'],
     incremental_strategy = 'merge',
     on_schema_change='append_new_columns',
