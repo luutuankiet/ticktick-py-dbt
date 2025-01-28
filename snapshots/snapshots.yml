@@ -1,0 +1,30 @@
+snapshots:
+  - name: "snp_tasks_raw"
+    relation: source('raw_data', 'tasks_raw')
+    config:
+      schema: snapshots
+      unique_key: id
+      strategy: check
+      check_cols: 
+        - id
+      invalidate_hard_deletes: true
+  
+  - name: "snp_lists_raw"
+    relation: source('raw_data', 'lists_raw')
+    config:
+      schema: snapshots
+      unique_key: id
+      strategy: check
+      check_cols: 
+        - id
+      invalidate_hard_deletes: true
+  
+  - name: "snp_folders_raw"
+    relation: source('raw_data', 'folders_raw')
+    config:
+      schema: snapshots
+      unique_key: id
+      strategy: check
+      check_cols: 
+        - id
+      invalidate_hard_deletes: true
