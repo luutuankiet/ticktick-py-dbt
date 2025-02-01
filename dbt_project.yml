@@ -7,15 +7,27 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
+snapshots:
+  todo_analytics:
+    +meta:
+      dagster:
+        group: "snapshots"
+
 models:
   todo_analytics:
     staging:
       +materialized: view
       +tags: "staging"
+      +meta:
+        dagster:
+          group: "staging"
       base:
         # utilizing the strat to allow deleting completed data from src ticktick
         +tags: "base"
     marts:
+      +meta:
+        dagster:
+          group: "marts"
       core:
         +materialized: table
         +tags: "core"
@@ -24,6 +36,9 @@ models:
 
 seeds:
   todo_analytics:
+    +meta:
+      dagster:
+        group: "seeds"
     +full_refresh: true
     +tags: "seeds"
     list_goal_mapping:
