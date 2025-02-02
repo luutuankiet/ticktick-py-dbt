@@ -9,6 +9,9 @@ snapshot-paths: ["snapshots"]
 
 models:
   todo_analytics:
+    intermediate:
+      +materialized: view
+      +enabled: false
     staging:
       +materialized: view
       +tags: "staging"
