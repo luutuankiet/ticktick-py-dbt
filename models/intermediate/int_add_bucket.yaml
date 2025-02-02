@@ -1,0 +1,8 @@
+models:
+  - name: int_add_bucket
+    data_tests:
+     - dbt_utils.expression_is_true:
+        expression: |
+          (todo_status = '0' AND habit_bucket_id is null)
+          OR 
+          (todo_status != '0' AND habit_bucket_id is not null)

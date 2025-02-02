@@ -1,0 +1,8 @@
+models:
+  - name: int_identify_recurr
+    data_tests:
+      - dbt_utils.expression_is_true:
+          expression: |
+            (todo_status = '0' AND todo_repeatflag <> 'default')
+            OR
+            (todo_status != '0' AND todo_repeattaskid != 'default')
