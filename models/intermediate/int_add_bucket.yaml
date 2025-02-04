@@ -1,8 +1,38 @@
 models:
   - name: int_add_bucket
-    data_tests:
-     - dbt_utils.expression_is_true:
-        expression: |
-          (todo_status = '0' AND habit_bucket_id is null)
-          OR 
-          (todo_status != '0' AND habit_bucket_id is not null)
+    description: |-
+      What : 
+      - Arrange the repeat todos into their "streak bucket" - a chain of todo in the same repeattaskid and status.
+      - There are 2 types of bucket created, done and undone. 
+      - The latest todo instance (status 0) will get NULL both buckets.
+      Why : 
+      - Putting consecutive todo instances is the basis of getting streak calculations.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: |-
+            (todo_status = '0' AND done_habit_bucket_id is null AND wontdo_habit_bucket_id is null)
+            OR
+            (todo_status != '0' AND (done_habit_bucket_id is not null) OR (wontdo_habit_bucket_id is not null))
+    columns:
+      - name: done_habit_bucket_id
+        description: Bucket for done streaks. 0 for wontdo and NULL for undone
+        data_type: bigint
+      - name: wontdo_habit_bucket_id
+        data_type: bigint
+        description: Bucket for wontdo streaks. 0 for done and NULL for undone
+      - name: todo_id
+        data_type: text
+      - name: todo_title
+        data_type: text
+      - name: todo_projectid
+        data_type: text
+      - name: todo_repeatflag
+        data_type: text
+      - name: todo_repeattaskid
+        data_type: text
+      - name: todo_status
+        data_type: text
+      - name: todo_derived__is_repeat
+        data_type: boolean
+      - name: todo_completedtime
+        data_type: timestamp without time zone

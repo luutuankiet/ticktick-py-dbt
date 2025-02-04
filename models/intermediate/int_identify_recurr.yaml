@@ -1,8 +1,37 @@
 models:
   - name: int_identify_recurr
-    data_tests:
+    description: |-
+      What : 
+      - Identify recurring todo and add a flag to them. 
+      - A recurring todo is either (1) a past todo with a future repeattaskid or (2) a current todo with repeatflag logic i.e. creates another repeat when checked.
+      Why :
+      - The base todo model repeattaskid misses on the current todo instance. This model column is to address that.
+    tests:
       - dbt_utils.expression_is_true:
-          expression: |
-            (todo_status = '0' AND todo_repeatflag <> 'default')
-            OR
-            (todo_status != '0' AND todo_repeattaskid != 'default')
+          expression: |-
+           todo_derived__is_repeat is true
+            AND (
+              (todo_status = '0' AND todo_repeatflag <> 'default')
+              OR
+              (todo_status != '0' AND todo_repeattaskid != 'default')
+            )
+    columns:
+      - name: todo_id
+      - name: todo_title
+        data_type: text
+      - name: todo_projectid
+        data_type: text
+      - name: todo_repeatflag
+        data_type: text
+      - name: todo_repeattaskid
+        data_type: text
+      - name: todo_status
+        data_type: text
+      - name: todo_derived__is_repeat
+        description: |-
+          This is a boolean field and the core output of this model. Flags to TRUE if either
+          1. Task is current (status 0) and still have repeatflag
+          2. Task is past (status <> 0) and has matching future repeattaskid
+        data_type: boolean
+      - name: todo_completedtime
+        data_type: timestamp without time zone

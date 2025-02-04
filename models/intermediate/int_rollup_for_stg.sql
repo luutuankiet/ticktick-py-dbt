@@ -1,0 +1,1 @@
+select * from {{ref('int_calculate_done_streak')}}

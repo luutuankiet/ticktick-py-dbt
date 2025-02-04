@@ -6,7 +6,7 @@ WITH source AS (
     FROM
         {{ ref('base_todos') }}
 ),
-identify_recurring AS (
+add_repeat_flag AS (
     -- handle flagging habits
     SELECT
         *,
@@ -43,12 +43,18 @@ selected_fields as (
     todo_status,
     todo_derived__is_repeat,
     todo_completedtime
-    from identify_recurring
+    from add_repeat_flag
     WHERE todo_derived__is_repeat is true
 ),
 
 final as (
     select * from selected_fields
+),
+
+debug as (
+    select * from selected_fields
+    where todo_id = '6583f9868f08a6578069f73b'
+    
 )
 
 select * from final
