@@ -50,6 +50,7 @@ This logic enables habit tracking and streak analysis for recurring tasks in the
 # Habit Streak Tracking Approaches
 
 ## 1. Date-Based Gap Analysis
+```sql
 WITH date_gaps AS (
   SELECT 
     todo_id,
@@ -60,11 +61,14 @@ WITH date_gaps AS (
     ) as days_since_last_completion
   FROM todos
 )
+```
 - Tracks actual completion intervals
 - Handles irregular patterns
 - Configurable break thresholds
 
 ## 2. Calendar Spine Method
+
+```sql
 WITH calendar AS (
   SELECT date_day 
   FROM dim_calendar
@@ -77,11 +81,13 @@ habit_calendar AS (
   FROM calendar c 
   LEFT JOIN todos t ON DATE(t.todo_completedtime) = c.date_day
 )
+```
 - Full visibility of all days
 - Perfect for consistency analysis
 - Supports frequency tracking
 
 ## 3. State Machine Approach
+```sql
 SELECT 
   todo_id,
   status,
@@ -90,11 +96,15 @@ SELECT
     WHEN status = prev_status THEN 0 
     ELSE 1 
   END as state_change
+```
+
 - Clear state transitions
 - Flexible streak rules
 - Maintainable logic
 
 ## 4. Rolling Window Method
+
+```sql
 SELECT 
   todo_id,
   COUNT(*) OVER (
@@ -102,6 +112,7 @@ SELECT
     ORDER BY todo_completedtime 
     ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
   ) as rolling_7day_completions
+```
 - Adaptable streak definitions
 - Multiple time window support
 - Trend analysis ready
