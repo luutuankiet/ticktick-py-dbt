@@ -72,6 +72,27 @@ source AS (
     FROM
         source_snp
 ),
+
+process_false_completed as (
+    {# sometimes new tasks with status = 0 have completed time. to wrangle this. #}
+    SELECT 
+    {{dbt_utils.star(
+        from = source('raw_data','tasks_raw'),
+        except = ['completedtime','status']
+    )}},
+    case when status = '0' and completedtime is not null then null 
+    else completedtime 
+    end as completedtime,
+    
+    case when status = '1' and completedtime is null then '0'
+    when status = '1' and completedtime is not null then '2'
+    end as status
+
+
+    from source
+),
+
+
 renamed AS (
     SELECT
         DISTINCT {{ adapter.quote("id") }} :: text AS "todo_id",
@@ -138,7 +159,7 @@ renamed AS (
                 modifiedtime DESC
         ) AS rn
     FROM
-        source
+        process_false_completed
     GROUP BY
         {{ dbt_utils.star(
             from = source(
@@ -156,8 +177,33 @@ refine_dates AS (
         renamed
     WHERE
         rn = 1
+),
+
+
+final as (
+    select * from refine_dates
+),
+
+debug as (
+    select 
+    
+    {# distinct todo_title #}
+    {{common_columns()}}
+
+     from refine_dates
+     where todo_title like '%schedule some cloudskillsboost path%' 
+     {# or todo_repeattaskid = '651faed48f08a002fdc1e77a' #}
+     {# where todo_repeattaskid is not null #}
+     {# and todo_repeatflag is not null  #}
+     {# and todo_id <> todo_repeattaskid #}
+     order by todo_modifiedtime
+
 )
+
+
+
+
 SELECT
     *
 FROM
-    refine_dates
+    final
