@@ -86,6 +86,7 @@ process_false_completed as (
     
     case when status = '1' and completedtime is null then '0'
     when status = '1' and completedtime is not null then '2'
+    else status
     end as status
 
 
