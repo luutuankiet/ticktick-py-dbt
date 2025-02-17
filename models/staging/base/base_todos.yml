@@ -7,6 +7,10 @@ models:
             (todo_status = '0' AND todo_completedtime is null)
             OR 
             (todo_status in ('-1','2','1') AND todo_completedtime is not null)
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - todo_id
+            - todo_completedtime
     columns:
       - name: todo_id
         data_tests:

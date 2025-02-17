@@ -1,0 +1,39 @@
+models:
+  - name: int_add_streak 
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - todo_id
+            - todo_completedtime
+          config:
+            severity: error
+            warn_if: ">0"
+            error_if: ">10"
+ 
+    columns:
+      - name: max_streak
+        data_type: bigint
+      - name: todo_done_streak
+        data_type: bigint
+      - name: todo_done_habit_bucket_id
+        data_type: bigint
+      - name: todo_wontdo_habit_bucket_id
+        data_type: bigint
+      - name: todo_id
+        data_type: text
+      - name: todo_title
+        data_type: text
+      - name: todo_projectid
+        data_type: text
+      - name: todo_repeatflag
+        data_type: text
+      - name: todo_repeattaskid
+        data_type: text
+      - name: todo_status
+        data_type: text
+      - name: todo_derived__is_repeat
+        data_type: boolean
+      - name: todo_completedtime
+        data_type: timestamp without time zone
+      - name: todo_duedate
+        data_type: timestamp without time zone
