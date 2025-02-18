@@ -9,6 +9,7 @@ models:
       - The base todo model repeattaskid misses on the current todo instance. This model column is to address that.
     tests:
       - dbt_utils.expression_is_true:
+          name: "verify_correct_repeat_flag_logic"
           expression: |-
             todo_derived__is_repeat is true
              AND (

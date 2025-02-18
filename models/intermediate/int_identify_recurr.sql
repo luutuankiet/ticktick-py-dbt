@@ -42,7 +42,8 @@ selected_fields as (
     todo_repeattaskid,
     todo_status,
     todo_derived__is_repeat,
-    todo_completedtime
+    todo_completedtime,
+    todo_duedate
     from add_repeat_flag
     WHERE todo_derived__is_repeat is true
 ),

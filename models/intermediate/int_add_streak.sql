@@ -1,24 +1,30 @@
-{% set exclude = [ 'todo_duedate', 'todo_completedtime', 'todo_modifiedtime', 'todo_createdtime' ] %}
+{% set exclude = [ "todo_duedate", "todo_completedtime", "todo_modifiedtime", "todo_createdtime", ] %}
 WITH source AS (
     SELECT
         *
     FROM
-        {{ ref('int_add_bucket') }}
+        {{ ref("int_add_bucket") }}
 ),
 get_streak AS (
+    {# gets streak for both wontdo and done #}
     SELECT
-        COUNT(todo_done_habit_bucket_id) over(
+        COUNT(todo_done_habit_bucket_id) over (
             PARTITION BY todo_repeattaskid,
             todo_done_habit_bucket_id
-        ) AS todo_done_streak,*
+        ) AS todo_done_streak,
+        COUNT(todo_wontdo_habit_bucket_id) over (
+            PARTITION BY todo_repeattaskid,
+            todo_wontdo_habit_bucket_id
+        ) AS todo_wontdo_streak,
+        source.*
     FROM
         source
 ),
-get_total_attempts AS (
+get_total_done_attempts AS (
     SELECT
         DISTINCT COUNT(todo_done_streak) over (
             PARTITION BY todo_repeattaskid
-        ) AS todo_total_done_attempts,
+        ) AS todo_done_total_attempts,
         todo_repeattaskid
     FROM
         get_streak
@@ -48,35 +54,49 @@ joined AS (
         s.todo_status,
         #}
         mx_st.todo_done_max_streak,
-        ta.todo_total_done_attempts,
+        ta.todo_done_total_attempts,
         s.*
     FROM
         get_streak AS s
         LEFT JOIN get_max_done_streak AS mx_st
-        ON s.todo_id = mx_st.todo_repeattaskid 
-        OR s.todo_repeattaskid = mx_st.todo_repeattaskid
-        LEFT JOIN get_total_attempts AS ta
-        ON s.todo_id = ta.todo_repeattaskid 
-        OR s.todo_repeattaskid = ta.todo_repeattaskid
+        ON (
+            s.todo_id = mx_st.todo_repeattaskid
+            AND s.todo_repeatflag <> 'default'
+        )
+        OR (
+            s.todo_repeattaskid = mx_st.todo_repeattaskid
+            AND s.todo_repeatflag = 'default'
+        )
+        LEFT JOIN get_total_done_attempts AS ta
+        ON (
+            s.todo_id = ta.todo_repeattaskid
+            AND s.todo_repeatflag <> 'default'
+        )
+        OR (
+            s.todo_repeattaskid = ta.todo_repeattaskid
+            AND s.todo_repeatflag = 'default'
+        )
 ),
 debug AS (
     SELECT
-        * {# {{ common_columns(exclude=exclude)}} #}
+        *
     FROM
-        joined {# get_streak #}
+        joined
     WHERE
         {# todo_title LIKE '%workout%' #}
-        todo_title LIKE '%shutdown routine%' {# todo_id = '66310add61f0912edb3b827a' #}
+        {# todo_repeattaskid = '66310add61f0912edb3b827a'  #}
+        {# todo_id = '66310add61f0912edb3b827a'  #}
+        todo_title LIKE '%shutdown routine%'
     ORDER BY
         todo_duedate
 ),
 FINAL AS (
     SELECT
-        *
+        joined.*
     FROM
         joined
 )
 SELECT
     *
 FROM
-    FINAL
+    final

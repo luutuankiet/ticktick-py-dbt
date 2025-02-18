@@ -24,7 +24,7 @@ add_done_bucket_id as (
                     todo_completedtime
             ) + 1
             ELSE NULL
-        END AS done_habit_bucket_id,
+        END AS todo_done_habit_bucket_id,
         *
     FROM
         source
@@ -51,7 +51,7 @@ add_wontdo_bucket_id as (
                     todo_completedtime
             ) + 1
             ELSE NULL
-        END AS wontdo_habit_bucket_id,
+        END AS todo_wontdo_habit_bucket_id,
         *
     FROM
         source
@@ -59,16 +59,16 @@ add_wontdo_bucket_id as (
 
 unioned as (
     select 
-    done_habit_bucket_id,
-    NULL as wontdo_habit_bucket_id,
+    ABS(todo_done_habit_bucket_id) as todo_done_habit_bucket_id,
+    NULL as todo_wontdo_habit_bucket_id,
     {{ dbt_utils.star(ref('int_identify_recurr'))}}
     FROM add_done_bucket_id
     WHERE todo_status in ('2', '0') -- so that both new and latest done todo  in same bucket
 
     UNION ALL 
     select 
-    NULL as done_habit_bucket_id,
-    wontdo_habit_bucket_id,
+    NULL as todo_done_habit_bucket_id,
+    ABS(todo_wontdo_habit_bucket_id) as todo_wontdo_habit_bucket_id,
     {{ dbt_utils.star(ref('int_identify_recurr'))}}
     FROM add_wontdo_bucket_id
     WHERE todo_status = '-1'
@@ -76,8 +76,8 @@ unioned as (
 
 debug as (
     select 
-    done_habit_bucket_id,
-    wontdo_habit_bucket_id,
+    todo_done_habit_bucket_id,
+    todo_wontdo_habit_bucket_id,
     todo_status,
     todo_completedtime,
     todo_title,

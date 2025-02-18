@@ -3,6 +3,7 @@ models:
   - name: base_todos
     tests:
       - dbt_utils.expression_is_true:
+          name: "verify_correct_relationship_status_and_completed_time"
           expression: |
             (todo_status = '0' AND todo_completedtime is null)
             OR 

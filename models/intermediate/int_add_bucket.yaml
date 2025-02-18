@@ -9,17 +9,29 @@ models:
       - Putting consecutive todo instances is the basis of getting streak calculations.
     tests:
       - dbt_utils.expression_is_true:
+          name: "verify_correct_buckets_calculations"
+          description: |
+            - Verify that Buckets are only assginged to done / wont do tasks.
+            - New tasks i.e. status = 0 will get NULL both buckets.
           expression: |-
-            (todo_status = '0' AND done_habit_bucket_id is null AND wontdo_habit_bucket_id is null)
+            (todo_status = '0' AND todo_done_habit_bucket_id is null AND todo_wontdo_habit_bucket_id is null)
             OR
-            (todo_status != '0' AND (done_habit_bucket_id is not null) OR (wontdo_habit_bucket_id is not null))
+            (todo_status != '0' AND (todo_done_habit_bucket_id is not null) OR (todo_wontdo_habit_bucket_id is not null))
     columns:
       - name: done_habit_bucket_id
-        description: Bucket for done streaks. 0 for wontdo and NULL for undone
+        description: |-
+          - Bucket for done streaks, grouped by repeattaskid
+          - Each groups of repeat tasks will have their own set of buckets descending from 0.
+          - The lower the bucket id the more recent thes streak is.
+          - 0 for wontdo and NULL for undone
         data_type: bigint
       - name: wontdo_habit_bucket_id
         data_type: bigint
-        description: Bucket for wontdo streaks. 0 for done and NULL for undone
+        description: |-
+          - Bucket for wontdo streaks, rouped by repeattaskid
+          - Each groups of repeat tasks will have their own set of buckets descending from 0.
+          - The lower the bucket id the more recent thes streak is.
+          - 0 for done and NULL for undone
       - name: todo_id
         data_type: text
       - name: todo_title
