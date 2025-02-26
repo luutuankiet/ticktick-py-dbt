@@ -36,6 +36,16 @@ get_total_done_attempts AS (
     ORDER BY
         todo_repeattaskid
 ),
+get_current_bucket AS (
+    SELECT
+        todo_repeattaskid,
+        MAX(todo_wontdo_habit_bucket_id) AS todo_current_wontdo_bucket,
+        MAX(todo_done_habit_bucket_id) AS todo_current_done_bucket
+    FROM
+        get_streak
+    GROUP BY
+        todo_repeattaskid
+),
 get_max_done_streak AS (
     SELECT
         todo_repeattaskid,
@@ -47,6 +57,32 @@ get_max_done_streak AS (
     GROUP BY
         todo_repeattaskid
 ),
+get_warning_wont_do_dim AS (
+    {# dimension for flagging if a wontdo streak passed threshold #}
+    {# latest bucket will always be biggest #}
+    SELECT
+        DISTINCT todo_repeattaskid,
+        CASE
+            WHEN todo_wontdo_streak = 1 THEN '⚠️1'
+            WHEN todo_wontdo_streak > 1 THEN '🆘' || todo_wontdo_streak
+            ELSE ' '
+        END AS todo_wontdo_bad_habit_flag
+    FROM
+        get_streak
+    WHERE
+        CONCAT(
+            todo_repeattaskid,
+            todo_wontdo_habit_bucket_id
+        ) IN (
+            SELECT
+                CONCAT(
+                    todo_repeattaskid,
+                    todo_current_wontdo_bucket
+                )
+            FROM
+                get_current_bucket
+        )
+),
 joined AS (
     SELECT
         {# mx_st.todo_repeattaskid,
@@ -55,6 +91,7 @@ joined AS (
         #}
         mx_st.todo_done_max_streak,
         ta.todo_done_total_attempts,
+        w.todo_wontdo_bad_habit_flag,
         s.*
     FROM
         get_streak AS s
@@ -74,6 +111,15 @@ joined AS (
         )
         OR (
             s.todo_repeattaskid = ta.todo_repeattaskid
+            AND s.todo_repeatflag = 'default'
+        )
+        LEFT JOIN get_warning_wont_do_dim AS w
+        ON (
+            s.todo_id = w.todo_repeattaskid
+            AND s.todo_repeatflag <> 'default'
+        )
+        OR (
+            s.todo_repeattaskid = w.todo_repeattaskid
             AND s.todo_repeatflag = 'default'
         )
 ),

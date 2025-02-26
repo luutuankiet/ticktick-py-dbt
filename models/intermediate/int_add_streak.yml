@@ -2,24 +2,9 @@ models:
   - name: int_add_streak
     tests:
       - dbt_utils.expression_is_true:
-          name: "verify_buckets_mutually_exclusive"
-          description: |
-            Done and wontdo buckets are mutually exclusive:
-            - One will always be null if the other has valid int value.
-            - Otherwise, both should be null.
-
           expression: |
             todo_done_habit_bucket_id + todo_wontdo_habit_bucket_id != 0
-          config:
-            where: |
-              todo_done_habit_bucket_id IS NOT NULL
-              AND 
-              todo_wontdo_habit_bucket_id IS NOT NULL
       - dbt_utils.expression_is_true:
-          name: "verify_valid_streak_for_non_null_bucket"
-          description: |
-            Verify that for each non-null buckets, an equivalent non 0 streak is calcualted.
-            If both are NULL, the status MUST be 0 (new)
           expression: |
             (todo_done_habit_bucket_id IS NOT NULL AND todo_done_streak != 0)
             OR
@@ -27,38 +12,90 @@ models:
             OR
             (todo_wontdo_habit_bucket_id IS NULL AND todo_wontdo_habit_bucket_id IS NULL AND todo_status = '0')
     columns:
-      - name: max_streak
-        data_type: bigint
       - name: todo_done_streak
+        meta:
+          metrics:
+            met_todo_done_streak:
+              type: average
         data_type: bigint
       - name: todo_done_habit_bucket_id
+        meta:
+          dimension:
+            type: number
         data_type: bigint
       - name: todo_wontdo_habit_bucket_id
+        meta:
+          dimension:
+            type: number
         data_type: bigint
-
       - name: todo_id
+        meta:
+          dimension:
+            type: string
         data_type: text
         data_tests:
-          - unique:
-              config:
-                error_if: ">10"
+          - unique
       - name: todo_title
+        meta:
+          dimension:
+            type: string
         data_type: text
       - name: todo_projectid
+        meta:
+          dimension:
+            type: string
         data_type: text
       - name: todo_repeatflag
+        meta:
+          dimension:
+            type: string
         data_type: text
       - name: todo_repeattaskid
+        meta:
+          dimension:
+            type: string
         data_type: text
       - name: todo_status
+        meta:
+          dimension:
+            type: string
         data_type: text
       - name: todo_derived__is_repeat
+        meta:
+          dimension:
+            type: boolean
         data_type: boolean
       - name: todo_completedtime
+        meta:
+          dimension:
+            type: timestamp
         data_type: timestamp without time zone
       - name: todo_duedate
+        meta:
+          dimension:
+            type: timestamp
         data_type: timestamp without time zone
       - name: todo_done_max_streak
+        meta:
+          metrics:
+            met_todo_done_max_streak:
+              type: average
         data_type: bigint
       - name: todo_done_total_attempts
+        meta:
+          metrics:
+            met_todo_done_total_attempts:
+              type: average
         data_type: bigint
+      - name: todo_wontdo_streak
+        data_type: bigint
+        meta:
+          metrics:
+            met_todo_wontdo_streak:
+              type: average
+      - name: todo_wontdo_bad_habit_flag
+        description: flags the habit if it is wont do consecutively over 1 time.
+        data_type: text
+        meta:
+          dimension:
+            type: string
