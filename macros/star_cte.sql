@@ -25,6 +25,7 @@
 
         {%- endfor -%}
 
+    {# {% do exceptions.raise_compiler_error('debug: ' ~ parsed_model )  %} #}
     {%- elif not ns.model_name -%}
         {%- set ns.model_name = this.name -%}
     {%- endif -%}

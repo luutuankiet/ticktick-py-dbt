@@ -2,20 +2,6 @@ models:
   - name: int_add_streak
     tests:
       - dbt_utils.expression_is_true:
-          name: "verify_buckets_mutually_exclusive"
-          description: |
-            Done and wontdo buckets are mutually exclusive:
-            - One will always be null if the other has valid int value.
-            - Otherwise, both should be null.
-
-          expression: |
-            todo_done_habit_bucket_id + todo_wontdo_habit_bucket_id != 0
-          config:
-            where: |
-              todo_done_habit_bucket_id IS NOT NULL
-              AND 
-              todo_wontdo_habit_bucket_id IS NOT NULL
-      - dbt_utils.expression_is_true:
           name: "verify_valid_streak_for_non_null_bucket"
           description: |
             Verify that for each non-null buckets, an equivalent non 0 streak is calcualted.
@@ -26,6 +12,11 @@ models:
             (todo_wontdo_habit_bucket_id IS NOT NULL AND todo_wontdo_streak != 0)
             OR
             (todo_wontdo_habit_bucket_id IS NULL AND todo_wontdo_habit_bucket_id IS NULL AND todo_status = '0')
+      - dbt_utils.expression_is_true:
+          name: "verify_active_habit_is_current"
+          description: |
+            Verify that
+             
     columns:
       - name: todo_done_streak
         meta:

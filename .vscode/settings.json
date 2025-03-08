@@ -30,5 +30,11 @@
     "[jinja-sql]": {
         "editor.defaultFormatter": "innoverio.vscode-dbt-power-user",
     },
-    "editor.maxTokenizationLineLength": 20000
+    "editor.maxTokenizationLineLength": 20000,
+    "dbt.buildModelCommandAdditionalParams": [
+        "--no-print"
+    ],
+    "dbt.runModelCommandAdditionalParams": [
+        "--no-print"
+    ]
 }

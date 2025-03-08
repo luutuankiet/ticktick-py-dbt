@@ -9,14 +9,19 @@ models:
       - Putting consecutive todo instances is the basis of getting streak calculations.
     tests:
       - dbt_utils.expression_is_true:
-          name: "verify_correct_buckets_calculations"
+          name: "verify_buckets_mutually_exclusive"
           description: |
-            - Verify that Buckets are only assginged to done / wont do tasks.
-            - New tasks i.e. status = 0 will get NULL both buckets.
-          expression: |-
-            (todo_status = '0' AND todo_done_habit_bucket_id is null AND todo_wontdo_habit_bucket_id is null)
-            OR
-            (todo_status != '0' AND (todo_done_habit_bucket_id is not null) OR (todo_wontdo_habit_bucket_id is not null))
+            Why : done and wontdo bucket are calculated fields thus needs testing.
+            What: test that done and wontdo buckets are mutually exclusive:
+            - One will always be null if the other has valid int value.
+            - Otherwise, both should be null.
+
+          expression: | 
+            {{ isnull('todo_done_habit_bucket_id') }} != {{ isnull('todo_wontdo_habit_bucket_id') }}
+          config:
+            where: todo_status !='0'
+              
+            
     columns:
       - name: done_habit_bucket_id
         description: |-
