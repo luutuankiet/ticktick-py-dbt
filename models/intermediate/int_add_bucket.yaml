@@ -20,7 +20,10 @@ models:
             {{ isnull('todo_done_habit_bucket_id') }} != {{ isnull('todo_wontdo_habit_bucket_id') }}
           config:
             where: todo_status !='0'
-              
+      - dbt_utils.equal_rowcount:
+          name: "verify_same_rowcount_as_upstream"
+          description: this add streak do not add additional rows thus should have same row as upstream.
+          compare_model: ref('int_identify_recurr')              
             
     columns:
       - name: done_habit_bucket_id

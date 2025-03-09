@@ -1,4 +1,3 @@
-{% set exclude = [ "todo_duedate", "todo_completedtime", "todo_modifiedtime", "todo_createdtime", ] %}
 WITH source AS (
     SELECT
         *
@@ -61,9 +60,9 @@ get_warning_wont_do_dim AS (
     {# dimension for flagging if a wontdo streak passed threshold #}
     {# latest bucket will always be biggest #}
     SELECT
-        DISTINCT todo_repeattaskid,
+        todo_id,
         CASE
-            WHEN todo_wontdo_streak = 1 THEN '⚠️1'
+            WHEN todo_wontdo_streak = 1 THEN '⚠️'
             WHEN todo_wontdo_streak > 1 THEN '🆘' || todo_wontdo_streak
             ELSE ' '
         END AS todo_wontdo_bad_habit_flag
@@ -83,15 +82,28 @@ get_warning_wont_do_dim AS (
                 get_current_bucket
         )
 ),
+flag_active_habits as (
+select 
+s.todo_id,
+s.todo_done_habit_bucket_id = c.todo_current_done_bucket as todo_done_isactive,
+s.todo_wontdo_habit_bucket_id = c.todo_current_wontdo_bucket as todo_wontdo_isactive
+from source s left join 
+get_current_bucket c on s.todo_repeattaskid = c.todo_repeattaskid
+or s.todo_id = c.todo_repeattaskid
+
+
+),
+
 joined AS (
     SELECT
-        {# mx_st.todo_repeattaskid,
-        ta.todo_repeattaskid,
-        s.todo_status,
-        #}
+        -- mx_st.todo_repeattaskid,
+        -- ta.todo_repeattaskid,
+        -- s.todo_status,
         mx_st.todo_done_max_streak,
         ta.todo_done_total_attempts,
         w.todo_wontdo_bad_habit_flag,
+        f.todo_done_isactive,
+        f.todo_wontdo_isactive,
         s.*
     FROM
         get_streak AS s
@@ -115,29 +127,21 @@ joined AS (
         )
         LEFT JOIN get_warning_wont_do_dim AS w
         ON (
-            s.todo_id = w.todo_repeattaskid
-            AND s.todo_repeatflag <> 'default'
+            s.todo_id = w.todo_id
         )
-        OR (
-            s.todo_repeattaskid = w.todo_repeattaskid
-            AND s.todo_repeatflag = 'default'
-        )
+        LEFT JOIN flag_active_habits f on s.todo_id = f.todo_id
 ),
 debug AS (
-    SELECT
-        *
-    FROM
-        joined
-    WHERE
-        {# todo_title LIKE '%workout%' #}
-        {# todo_repeattaskid = '66310add61f0912edb3b827a'  #}
-        {# todo_id = '66310add61f0912edb3b827a'  #}
-        todo_title LIKE '%shutdown routine%'
-    ORDER BY
-        todo_duedate
+    select
+
+    {{star_cte('get_warning_wont_do_dim')}}
+    from 
+    get_warning_wont_do_dim
+
 ),
 FINAL AS (
     SELECT
+    distinct
         joined.*
     FROM
         joined

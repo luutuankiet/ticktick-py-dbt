@@ -2,20 +2,22 @@ models:
   - name: int_add_streak
     tests:
       - dbt_utils.expression_is_true:
-          name: "verify_valid_streak_for_non_null_bucket"
+          name: "verify_valid_streak_assignment"
           description: |
-            Verify that for each non-null buckets, an equivalent non 0 streak is calcualted.
-            If both are NULL, the status MUST be 0 (new)
+            Why : streak count is a calculated fields which needs to be tested.
+            What : 
+            - Verify that for each non-null buckets, an equivalent non 0 streak is calcualted.
+            - If both bucket are NULL, the status MUST be 0 (new) hence streak is 0.
           expression: |
             (todo_done_habit_bucket_id IS NOT NULL AND todo_done_streak != 0)
             OR
             (todo_wontdo_habit_bucket_id IS NOT NULL AND todo_wontdo_streak != 0)
             OR
-            (todo_wontdo_habit_bucket_id IS NULL AND todo_wontdo_habit_bucket_id IS NULL AND todo_status = '0')
-      - dbt_utils.expression_is_true:
-          name: "verify_active_habit_is_current"
-          description: |
-            Verify that
+            ({{ isnull('todo_wontdo_habit_bucket_id') }} AND {{ isnull('todo_done_habit_bucket_id') }} AND todo_status = '0')
+      - dbt_utils.equal_rowcount:
+          name: "verify_same_rowcount_as_upstream"
+          description: this add streak do not add additional rows thus should have same row as upstream.
+          compare_model: ref('int_add_bucket')
              
     columns:
       - name: todo_done_streak
@@ -88,6 +90,14 @@ models:
               type: average
         data_type: bigint
       - name: todo_done_total_attempts
+        description: rolled up by todo_id / repeattaskid to get the total attempts.
+        data_tests:
+          - dbt_utils.expression_is_true:
+              name: "verify_valid_total_attempts"
+              description: |
+                - Why: total attempts is a calculated field that depends on done_streak.
+                - What : because all todos in this model are recurring, total attempts should be > 0.
+              expression: "> 0"
         meta:
           metrics:
             met_todo_done_total_attempts:
@@ -107,3 +117,8 @@ models:
         meta:
           dimension:
             type: string
+      - name: todo_done_isactive
+        data_type: boolean
+      - name: todo_wontdo_isactive
+        data_type: boolean
+    description: hello

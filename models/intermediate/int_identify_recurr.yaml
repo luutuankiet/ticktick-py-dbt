@@ -17,6 +17,9 @@ models:
                OR
                (todo_status != '0' AND todo_repeattaskid != 'default')
              )
+      - dbt_utils.fewer_rows_than:
+          description: this add streak do not add additional rows thus should have same row as upstream.
+          compare_model: ref('base_todos')             
     columns:
       - name: todo_id
       - name: todo_title
