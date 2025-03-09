@@ -25,17 +25,22 @@ models:
           metrics:
             met_todo_done_streak:
               type: average
+          dimension:
+            type: number
         data_type: bigint
+        description: ""
       - name: todo_done_habit_bucket_id
         meta:
           dimension:
             type: number
         data_type: bigint
+        description: ""
       - name: todo_wontdo_habit_bucket_id
         meta:
           dimension:
             type: number
         data_type: bigint
+        description: ""
       - name: todo_id
         meta:
           dimension:
@@ -43,62 +48,76 @@ models:
         data_type: text
         data_tests:
           - unique
+        description: ""
       - name: todo_title
         meta:
           dimension:
             type: string
         data_type: text
+        description: ""
       - name: todo_projectid
         meta:
           dimension:
             type: string
         data_type: text
+        description: ""
       - name: todo_repeatflag
         meta:
           dimension:
             type: string
         data_type: text
+        description: ""
       - name: todo_repeattaskid
         meta:
           dimension:
             type: string
         data_type: text
+        description: ""
       - name: todo_status
         meta:
           dimension:
             type: string
         data_type: text
+        description: ""
       - name: todo_derived__is_repeat
         meta:
           dimension:
             type: boolean
         data_type: boolean
+        description: ""
       - name: todo_completedtime
         meta:
           dimension:
             type: timestamp
         data_type: timestamp without time zone
+        description: ""
       - name: todo_duedate
         meta:
           dimension:
             type: timestamp
         data_type: timestamp without time zone
+        description: ""
       - name: todo_done_max_streak
         data_tests:
           - dbt_utils.expression_is_true:
               expression: " <= todo_done_max_streak"
           - constant:
-              name: "verify_only_one_max_streak_per_todo"
-              description: "this column gets the MAX value per todo thus should only contain 1 value per todo group"
-              group_by_columns: ['todo_repeattaskid']
+              name: verify_only_one_max_streak_per_todo
+              description: >-
+                this column gets the MAX value per todo thus should only contain
+                1 value per todo group
+              group_by_columns:
+                - todo_repeattaskid
               config:
                 where: "todo_repeattaskid <> 'default' "
-
         meta:
           metrics:
             met_todo_done_max_streak:
               type: average
+          dimension:
+            type: number
         data_type: bigint
+        description: ""
       - name: todo_done_total_attempts
         description: rolled up by todo_id / repeattaskid to get the total attempts.
         data_tests:
@@ -112,6 +131,8 @@ models:
           metrics:
             met_todo_done_total_attempts:
               type: average
+          dimension:
+            type: number
         data_type: bigint
       - name: todo_wontdo_streak
         data_type: bigint
@@ -119,6 +140,9 @@ models:
           metrics:
             met_todo_wontdo_streak:
               type: average
+          dimension:
+            type: number
+        description: ""
       - name: todo_wontdo_bad_habit_flag
         description: |-
           -  flags the habit if it is wont do consecutively over 1 time.
@@ -126,9 +150,12 @@ models:
         data_type: text
         data_tests:
           - constant:
-              name: "verify_one_flag_per_todo"
-              description: "this flag is rolled up to each habit groups thus should only have 1 flag per group."
-              group_by_columns: ['todo_repeattaskid']
+              name: verify_one_flag_per_todo
+              description: >-
+                this flag is rolled up to each habit groups thus should only
+                have 1 flag per group.
+              group_by_columns:
+                - todo_repeattaskid
               config:
                 where: "todo_repeattaskid <> 'default' "
         meta:
@@ -136,6 +163,13 @@ models:
             type: string
       - name: todo_done_isactive
         data_type: boolean
+        description: ""
+        meta:
+          dimension:
+            type: boolean
       - name: todo_wontdo_isactive
         data_type: boolean
-    description: hello
+        description: ""
+        meta:
+          dimension:
+            type: boolean

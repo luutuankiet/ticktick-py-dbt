@@ -28,7 +28,7 @@
     "dbt.dbtPythonPathOverride": "${workspaceFolder}/.venv/bin/python",
     "dbt.perspectiveTheme": "Monokai",
     "[jinja-sql]": {
-        "editor.defaultFormatter": "innoverio.vscode-dbt-power-user",
+        "editor.defaultFormatter": "henriblancke.vscode-dbt-formatter",
     },
     "editor.maxTokenizationLineLength": 20000,
     "dbt.buildModelCommandAdditionalParams": [

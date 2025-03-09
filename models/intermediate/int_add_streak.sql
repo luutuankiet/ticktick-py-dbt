@@ -82,18 +82,17 @@ get_warning_wont_do_dim AS (
                 get_current_bucket
         )
 ),
-flag_active_habits as (
-select 
-s.todo_id,
-s.todo_done_habit_bucket_id = c.todo_current_done_bucket as todo_done_isactive,
-s.todo_wontdo_habit_bucket_id = c.todo_current_wontdo_bucket as todo_wontdo_isactive
-from source s left join 
-get_current_bucket c on s.todo_repeattaskid = c.todo_repeattaskid
-or s.todo_id = c.todo_repeattaskid
-
-
+flag_active_habits AS (
+    SELECT
+        s.todo_id,
+        s.todo_done_habit_bucket_id = C.todo_current_done_bucket AS todo_done_isactive,
+        s.todo_wontdo_habit_bucket_id = C.todo_current_wontdo_bucket AS todo_wontdo_isactive
+    FROM
+        source s
+        LEFT JOIN get_current_bucket C
+        ON s.todo_repeattaskid = C.todo_repeattaskid
+        OR s.todo_id = C.todo_repeattaskid
 ),
-
 joined AS (
     {# this is where all the calculated columns rolls over to each habit groups#}
     SELECT
@@ -132,24 +131,22 @@ joined AS (
             s.todo_repeattaskid = w.todo_repeattaskid
             AND s.todo_repeatflag = 'default'
         )
-        INNER JOIN flag_active_habits f on s.todo_id = f.todo_id
+        INNER JOIN flag_active_habits f
+        ON s.todo_id = f.todo_id
 ),
 debug AS (
-    select
-
-    {{star_cte('get_warning_wont_do_dim')}}
-    from 
-    get_warning_wont_do_dim
-
+    SELECT
+        {{ star_cte("get_warning_wont_do_dim") }}
+    FROM
+        get_warning_wont_do_dim
 ),
 FINAL AS (
     SELECT
-    distinct
-        joined.*
+        DISTINCT joined.*
     FROM
         joined
 )
 SELECT
     *
 FROM
-    final
+    FINAL
