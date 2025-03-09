@@ -84,6 +84,16 @@ models:
             type: timestamp
         data_type: timestamp without time zone
       - name: todo_done_max_streak
+        data_tests:
+          - dbt_utils.expression_is_true:
+              expression: " <= todo_done_max_streak"
+          - constant:
+              name: "verify_only_one_max_streak_per_todo"
+              description: "this column gets the MAX value per todo thus should only contain 1 value per todo group"
+              group_by_columns: ['todo_repeattaskid']
+              config:
+                where: "todo_repeattaskid <> 'default' "
+
         meta:
           metrics:
             met_todo_done_max_streak:
@@ -114,6 +124,13 @@ models:
           -  flags the habit if it is wont do consecutively over 1 time.
           - only affects the latest bucket
         data_type: text
+        data_tests:
+          - constant:
+              name: "verify_one_flag_per_todo"
+              description: "this flag is rolled up to each habit groups thus should only have 1 flag per group."
+              group_by_columns: ['todo_repeattaskid']
+              config:
+                where: "todo_repeattaskid <> 'default' "
         meta:
           dimension:
             type: string

@@ -60,7 +60,7 @@ get_warning_wont_do_dim AS (
     {# dimension for flagging if a wontdo streak passed threshold #}
     {# latest bucket will always be biggest #}
     SELECT
-        todo_id,
+        todo_repeattaskid,
         CASE
             WHEN todo_wontdo_streak = 1 THEN '⚠️'
             WHEN todo_wontdo_streak > 1 THEN '🆘' || todo_wontdo_streak
@@ -95,10 +95,8 @@ or s.todo_id = c.todo_repeattaskid
 ),
 
 joined AS (
+    {# this is where all the calculated columns rolls over to each habit groups#}
     SELECT
-        -- mx_st.todo_repeattaskid,
-        -- ta.todo_repeattaskid,
-        -- s.todo_status,
         mx_st.todo_done_max_streak,
         ta.todo_done_total_attempts,
         w.todo_wontdo_bad_habit_flag,
@@ -127,9 +125,14 @@ joined AS (
         )
         LEFT JOIN get_warning_wont_do_dim AS w
         ON (
-            s.todo_id = w.todo_id
+            s.todo_id = w.todo_repeattaskid
+            AND s.todo_repeatflag <> 'default'
         )
-        LEFT JOIN flag_active_habits f on s.todo_id = f.todo_id
+        OR (
+            s.todo_repeattaskid = w.todo_repeattaskid
+            AND s.todo_repeatflag = 'default'
+        )
+        INNER JOIN flag_active_habits f on s.todo_id = f.todo_id
 ),
 debug AS (
     select
