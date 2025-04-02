@@ -44,10 +44,11 @@ source_snp AS (
                 'raw_data',
                 'tasks_raw'
             ),
-            except = ['modifiedtime']
+            except = ['modifiedtime','deleted']
         ) }},
         -- gotta explicitly handle this cauaes snap's data casted as timestamp
-        modifiedtime :: text AS modifiedtime
+        modifiedtime :: text AS modifiedtime,
+        true as deleted,
     FROM
         {{ ref(
             'snp_tasks_raw',
