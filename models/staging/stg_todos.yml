@@ -1,304 +1,295 @@
-version: 2
 models:
   - name: stg_todos
+    description: ""
     columns:
-      - name: date_start_key
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: date_due_key
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: date_completed_key
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: date_created_key
-        description: ""
-        meta:
-          dimension:
-            type: string
       - name: todo_key
-        description: "surrogate key by joining todo_id and todo_modifiedtime"
-        data_tests:
-          - unique
-          - not_null
-        meta:
-          dimension:
-            type: string
+        data_type: text
+        description: ""
+
+      - name: date_start_key
+        data_type: text
+        description: ""
+
+      - name: date_due_key
+        data_type: text
+        description: ""
+
+      - name: date_completed_key
+        data_type: text
+        description: ""
+
+      - name: date_created_key
+        data_type: text
+        description: ""
+
+      - name: date_modified_key
+        data_type: text
+        description: ""
+
       - name: list_key
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
+
       - name: folder_key
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
+
       - name: status_key
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_id
-        description: ""
-        data_tests:
-          - unique
-        meta:
-          dimension:
-            type: string
-      - name: todo_createdtime
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_completedtime
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_startdate
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_duedate
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_projectid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_sortorder
-        description: ""
-        meta:
-          dimension:
-            type: number
+
       - name: todo_title
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_content
+
+      - name: todo_projectid
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_desc
+
+      - name: todo_derived__habit_streak
+        data_type: bigint
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_timezone
+
+      - name: _todo__habit_streak_bucket_id
+        data_type: bigint
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_isfloating
+
+      - name: todo_derived__is_repeat
+        data_type: boolean
         description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: todo_isallday
+
+      - name: todo_id
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: todo_reminder
+
+      - name: todo_completedtime
+        data_type: timestamp without time zone
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: reminders
+
+      - name: todo_startdate
+        data_type: timestamp without time zone
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_exdate
+
+      - name: todo_duedate
+        data_type: timestamp without time zone
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_priority
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_status
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_items
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_progress
-        description: ""
-        meta:
-          dimension:
-            type: number
+
       - name: todo_modifiedtime
+        data_type: timestamp without time zone
         description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_etag
+
+      - name: todo_createdtime
+        data_type: timestamp without time zone
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_deleted
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: todo_creator
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_focussummaries
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_columnid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_kind
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_imgmode
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_tags
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_repeatfrom
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_attachments
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_repeattaskid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_commentcount
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_completeduserid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_repeatflag
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_pinnedtime
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: childids
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_deletedtime
-        description: ""
-        meta:
-          dimension:
-            type: string
+
       - name: todo_repeatfirstdate
+        data_type: timestamp without time zone
         description: ""
-        meta:
-          dimension:
-            type: timestamp
+
+      - name: todo_sortorder
+        data_type: bigint
+        description: ""
+
+      - name: todo_content
+        data_type: text
+        description: ""
+
+      - name: todo_desc
+        data_type: text
+        description: ""
+
+      - name: todo_timezone
+        data_type: text
+        description: ""
+
+      - name: todo_isfloating
+        data_type: boolean
+        description: ""
+
+      - name: todo_isallday
+        data_type: boolean
+        description: ""
+
+      - name: todo_reminder
+        data_type: text
+        description: ""
+
+      - name: reminders
+        data_type: text
+        description: ""
+
+      - name: todo_exdate
+        data_type: text
+        description: ""
+
+      - name: todo_priority
+        data_type: integer
+        description: ""
+
+      - name: todo_status
+        data_type: text
+        description: ""
+
+      - name: todo_items
+        data_type: text
+        description: ""
+
+      - name: todo_progress
+        data_type: double precision
+        description: ""
+
+      - name: todo_etag
+        data_type: text
+        description: ""
+
+      - name: todo_deleted
+        data_type: boolean
+        description: ""
+
+      - name: todo_creator
+        data_type: integer
+        description: ""
+
+      - name: todo_focussummaries
+        data_type: text
+        description: ""
+
+      - name: todo_columnid
+        data_type: text
+        description: ""
+
+      - name: todo_kind
+        data_type: text
+        description: ""
+
+      - name: todo_imgmode
+        data_type: text
+        description: ""
+
+      - name: todo_tags
+        data_type: text
+        description: ""
+
+      - name: todo_repeatfrom
+        data_type: integer
+        description: ""
+
+      - name: todo_attachments
+        data_type: text
+        description: ""
+
+      - name: todo_repeattaskid
+        data_type: text
+        description: ""
+
+      - name: todo_commentcount
+        data_type: double precision
+        description: ""
+
+      - name: todo_completeduserid
+        data_type: text
+        description: ""
+
+      - name: todo_repeatflag
+        data_type: text
+        description: ""
+
+      - name: todo_pinnedtime
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: childids
+        data_type: text
+        description: ""
+
+      - name: todo_deletedtime
+        data_type: text
+        description: ""
+
       - name: todo_pomodorosummaries
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
+
       - name: todo_parentid
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
+
       - name: todo_annoyingalert
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
+
+      - name: todo_modifiedtime_humanize
+        data_type: text
+        description: ""
+
+      - name: todo_duedate_humanize
+        data_type: text
+        description: ""
+
+      - name: rn
+        data_type: bigint
+        description: ""
+
       - name: todo_createdtime_derived_date
+        data_type: date
         description: ""
-        meta:
-          dimension:
-            type: date
+
       - name: todo_completedtime_derived_date
+        data_type: date
         description: ""
-        meta:
-          dimension:
-            type: date
+
       - name: todo_startdate_derived_date
+        data_type: date
         description: ""
-        meta:
-          dimension:
-            type: date
+
       - name: todo_duedate_derived_date
+        data_type: date
         description: ""
-        meta:
-          dimension:
-            type: date
+
+      - name: todo_modifiedtime_derived_date
+        data_type: date
+        description: ""
+
+      - name: _todo__habit_undone_streak_bucket_id
+        data_type: bigint
+        description: ""
+
+      - name: _status_lag
+        data_type: text
+        description: ""
+
+      - name: _status_lead
+        data_type: text
+        description: ""
+
+      - name: _todo_derived__consecutive_undone
+        data_type: bigint
+        description: ""
+
+      - name: todo_derived__consecutive_undone
+        data_type: bigint
+        description: ""
+
+      - name: todo_list_name
+        data_type: text
+        description: ""
+
+      - name: todo_folder_name
+        data_type: text
+        description: ""
+
       - name: list_id
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
+
       - name: folder_id
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
+
       - name: status_id
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: date_due_lookahead_key
+
+      - name: _modified_time
+        data_type: timestamp without time zone
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: lookahead_flag
-        description: ""
-        meta:
-          dimension:
-            type: boolean

@@ -20,7 +20,7 @@
     "python.terminal.activateEnvironment": true,
     "terminal.integrated.inheritEnv": true,
     "dbt.lineage.showNonSelectEdges": true,
-    "dbt.lineage.defaultExpansion": 2,
+    "dbt.lineage.defaultExpansion": 9,
     "files.associations": {
         "/**/.github/**/*.yml": "github-actions-workflow"
     },

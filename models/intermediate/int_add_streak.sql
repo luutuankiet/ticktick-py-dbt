@@ -84,14 +84,18 @@ get_warning_wont_do_dim AS (
 ),
 flag_active_habits AS (
     SELECT
-        s.todo_id,
-        s.todo_done_habit_bucket_id = C.todo_current_done_bucket AS todo_done_isactive,
-        s.todo_wontdo_habit_bucket_id = C.todo_current_wontdo_bucket AS todo_wontdo_isactive
+        todo_id,
+        todo_title,
+        todo_repeattaskid,
+        CASE
+            WHEN todo_deleted = TRUE THEN FALSE
+            WHEN todo_status != '0' THEN FALSE
+            ELSE TRUE
+        END AS todo_habit_is_active
     FROM
         source s
-        LEFT JOIN get_current_bucket C
-        ON s.todo_repeattaskid = C.todo_repeattaskid
-        OR s.todo_id = C.todo_repeattaskid
+    WHERE
+        todo_repeattaskid = todo_id
 ),
 joined AS (
     {# this is where all the calculated columns rolls over to each habit groups#}
@@ -99,8 +103,9 @@ joined AS (
         mx_st.todo_done_max_streak,
         ta.todo_done_total_attempts,
         w.todo_wontdo_bad_habit_flag,
-        f.todo_done_isactive,
-        f.todo_wontdo_isactive,
+        f.todo_habit_is_active,
+        C.todo_current_done_bucket,
+        C.todo_current_wontdo_bucket,
         s.*
     FROM
         get_streak AS s
@@ -131,14 +136,30 @@ joined AS (
             s.todo_repeattaskid = w.todo_repeattaskid
             AND s.todo_repeatflag = 'default'
         )
-        INNER JOIN flag_active_habits f
-        ON s.todo_id = f.todo_id
+        LEFT JOIN flag_active_habits f
+        ON (
+            s.todo_id = f.todo_repeattaskid
+            AND s.todo_repeatflag <> 'default'
+        )
+        OR (
+            s.todo_repeattaskid = f.todo_repeattaskid
+            AND s.todo_repeatflag = 'default'
+        )
+        LEFT JOIN get_current_bucket C
+        ON (
+            s.todo_id = C.todo_repeattaskid
+            AND s.todo_repeatflag <> 'default'
+        )
+        OR (
+            s.todo_repeattaskid = C.todo_repeattaskid
+            AND s.todo_repeatflag = 'default'
+        )
 ),
 debug AS (
     SELECT
-        {{ star_cte("get_warning_wont_do_dim") }}
+        *
     FROM
-        get_warning_wont_do_dim
+        flag_active_habits
 ),
 FINAL AS (
     SELECT

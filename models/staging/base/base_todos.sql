@@ -48,7 +48,7 @@ source_snp AS (
         ) }},
         -- gotta explicitly handle this cauaes snap's data casted as timestamp
         modifiedtime :: text AS modifiedtime,
-        true as deleted,
+        true :: text as deleted
     FROM
         {{ ref(
             'snp_tasks_raw',

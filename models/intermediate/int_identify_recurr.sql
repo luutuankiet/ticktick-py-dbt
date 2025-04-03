@@ -43,7 +43,8 @@ selected_fields as (
     todo_status,
     todo_derived__is_repeat,
     todo_completedtime,
-    todo_duedate
+    todo_duedate,
+    todo_deleted
     from add_repeat_flag
     WHERE todo_derived__is_repeat is true
 ),

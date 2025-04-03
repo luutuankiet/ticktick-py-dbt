@@ -28,19 +28,16 @@ models:
           dimension:
             type: number
         data_type: bigint
-        description: ""
       - name: todo_done_habit_bucket_id
         meta:
           dimension:
             type: number
         data_type: bigint
-        description: ""
       - name: todo_wontdo_habit_bucket_id
         meta:
           dimension:
             type: number
         data_type: bigint
-        description: ""
       - name: todo_id
         meta:
           dimension:
@@ -48,59 +45,48 @@ models:
         data_type: text
         data_tests:
           - unique
-        description: ""
       - name: todo_title
         meta:
           dimension:
             type: string
         data_type: text
-        description: ""
       - name: todo_projectid
         meta:
           dimension:
             type: string
         data_type: text
-        description: ""
       - name: todo_repeatflag
         meta:
           dimension:
             type: string
         data_type: text
-        description: ""
       - name: todo_repeattaskid
         meta:
           dimension:
             type: string
         data_type: text
-        description: ""
       - name: todo_status
         meta:
           dimension:
             type: string
         data_type: text
-        description: ""
       - name: todo_derived__is_repeat
         meta:
           dimension:
             type: boolean
         data_type: boolean
-        description: ""
       - name: todo_completedtime
         meta:
           dimension:
             type: timestamp
         data_type: timestamp without time zone
-        description: ""
       - name: todo_duedate
         meta:
           dimension:
             type: timestamp
         data_type: timestamp without time zone
-        description: ""
       - name: todo_done_max_streak
         data_tests:
-          - dbt_utils.expression_is_true:
-              expression: " <= todo_done_max_streak"
           - constant:
               name: verify_only_one_max_streak_per_todo
               description: >-
@@ -117,7 +103,6 @@ models:
           dimension:
             type: number
         data_type: bigint
-        description: ""
       - name: todo_done_total_attempts
         description: rolled up by todo_id / repeattaskid to get the total attempts.
         data_tests:
@@ -142,7 +127,6 @@ models:
               type: average
           dimension:
             type: number
-        description: ""
       - name: todo_wontdo_bad_habit_flag
         description: |-
           -  flags the habit if it is wont do consecutively over 1 time.
@@ -161,15 +145,23 @@ models:
         meta:
           dimension:
             type: string
-      - name: todo_done_isactive
+      - name: todo_current_done_bucket
+        description: |-
+          - The latest (max) done bucket id of the habit
+          - Rolling counter up to the latest item
+        data_type: bigint
+      - name: todo_current_wontdo_bucket
+        description: |-
+          - The latest (max) wontdo bucket id of the habit
+          - Rolling counter up to the latest item
+        data_type: bigint
+      - name: todo_deleted
         data_type: boolean
         description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: todo_wontdo_isactive
+      - name: todo_habit_is_active
         data_type: boolean
-        description: ""
-        meta:
-          dimension:
-            type: boolean
+        description: |
+          flag if the habit is currently active (i.e. can the user complete it)
+          cases
+          1. repeattaskId pointing to a deleted item
+          2. repeattaskId pointing to an item that has completed. 
