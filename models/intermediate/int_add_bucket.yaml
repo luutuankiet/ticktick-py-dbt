@@ -26,14 +26,14 @@ models:
           compare_model: ref('int_identify_recurr')              
             
     columns:
-      - name: done_habit_bucket_id
+      - name: todo_done_habit_bucket_id
         description: |-
           - Bucket for done streaks, grouped by repeattaskid
           - Each groups of repeat tasks will have their own set of buckets descending from 0.
           - The lower the bucket id the more recent thes streak is.
           - 0 for wontdo and NULL for undone
         data_type: bigint
-      - name: wontdo_habit_bucket_id
+      - name: todo_wontdo_habit_bucket_id
         data_type: bigint
         description: |-
           - Bucket for wontdo streaks, rouped by repeattaskid
@@ -55,4 +55,6 @@ models:
       - name: todo_derived__is_repeat
         data_type: boolean
       - name: todo_completedtime
+        data_type: timestamp without time zone
+      - name: todo_duedate
         data_type: timestamp without time zone
