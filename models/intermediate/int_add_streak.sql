@@ -15,6 +15,11 @@ get_streak AS (
             PARTITION BY todo_repeattaskid,
             todo_wontdo_habit_bucket_id
         ) AS todo_wontdo_streak,
+    row_number() over (
+        partition by todo_repeattaskid
+        order by todo_duedate desc
+    ) as rn,
+
         source.*
     FROM
         source
@@ -62,6 +67,7 @@ get_warning_wont_do_dim AS (
     SELECT
         todo_repeattaskid,
         CASE
+            WHEN todo_status != '-1' THEN ' '
             WHEN todo_wontdo_streak = 1 THEN '⚠️'
             WHEN todo_wontdo_streak > 1 THEN '🆘' || todo_wontdo_streak
             ELSE ' '
@@ -81,6 +87,7 @@ get_warning_wont_do_dim AS (
             FROM
                 get_current_bucket
         )
+        AND rn = 2
 ),
 flag_active_habits AS (
     SELECT
@@ -102,7 +109,7 @@ joined AS (
     SELECT
         mx_st.todo_done_max_streak,
         ta.todo_done_total_attempts,
-        w.todo_wontdo_bad_habit_flag,
+        coalesce(w.todo_wontdo_bad_habit_flag, ' ') AS todo_wontdo_bad_habit_flag,
         f.todo_habit_is_active,
         C.todo_current_done_bucket,
         C.todo_current_wontdo_bucket,
