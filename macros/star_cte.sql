@@ -1,6 +1,9 @@
-{%- macro star_cte(cte_name, model_name=none, relation_alias=none,prefix='', suffix='', quote_identifiers=True) -%} 
+{%- macro star_cte(cte_name, model_name=none, relation_alias=none,prefix='', suffix='', quote_identifiers=true, include_star=true) -%} 
+{% if prefix  == '' %} 
+    {% set prefix = ( cte_name | upper ~ '__')-%} 
+{% endif %}
 {%- set re = modules.re -%}
-{%- set ns = namespace(model_name=model_name, found_cte=false, cte_content=[]) -%}
+{%- set ns = namespace(model_name=model_name, found_cte=false, cte_content=[], star_column_str='') -%}
 {%- set parsed_model = context['context']['model'] -%}
 {%- if execute -%}
 
@@ -122,7 +125,6 @@
         {%- set raw_columns = columns_section.split(',') -%}
         {%- set columns = [] -%}
 
-        
         {# Process each column to clean it up #}
         {%- for col in raw_columns -%}
             {%- set cleaned_col = col.strip().lower() -%}
@@ -131,6 +133,19 @@
             {%- set cleaned_col = re.sub(re_comments_pattern, '', cleaned_col) -%}
             {#  #}
             {%- if cleaned_col == '' -%} {%- continue -%} {%- endif -%}
+
+            {# handle include_star #}
+            {%- if '*' in cleaned_col and include_star -%}
+                {%- set ns.star_column_str = (
+                     "'' as \"" 'CTE_' ~ cte_name ~ '_HAS_STAR' ~ "\",\n"
+                    ~ "*,"
+                )
+                -%}
+                {%- continue -%}
+
+            {%- elif '*' in cleaned_col and not include_star -%}
+                {%- continue -%}
+            {%- endif -%}
 
             {# Extract alias if it exists #}
             {%- if ' as ' in cleaned_col|lower -%}
@@ -165,9 +180,8 @@
 
 {#  starts laying out the columns #}
 
-
+        {{ ns.star_column_str }}
         {%- for col in columns -%}
-            {%- if '*' in col -%} * {%- continue -%} {%- endif -%}
             {%- if relation_alias -%}{{- relation_alias -}}.{%- else -%}{%- endif -%}
                 {%- if quote_identifiers -%}
                     {{- adapter.quote(col)|trim -}} {%- if prefix!='' or suffix!='' -%} as {{- adapter.quote(prefix ~ col ~ suffix)|trim -}} {%- endif -%}
