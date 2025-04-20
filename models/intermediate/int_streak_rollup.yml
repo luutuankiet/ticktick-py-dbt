@@ -1,0 +1,83 @@
+models:
+  - name: int_streak_rollup
+    description: ""
+    columns:
+      - name: todo_title
+        data_type: text
+        description: the title of task, coalesced to the latest task's value if there is one
+
+      - name: todo_projectid
+        data_type: text
+        description: the project of task, coalesced to the latest task's value if there is one
+
+      - name: todo_done_max_streak
+        data_type: bigint
+        description: ""
+
+      - name: todo_done_total_attempts
+        data_type: bigint
+        description: ""
+
+      - name: todo_wontdo_bad_habit_flag
+        data_type: text
+        description: ""
+
+      - name: todo_habit_is_active
+        data_type: boolean
+        description: ""
+
+      - name: todo_current_done_bucket
+        data_type: bigint
+        description: ""
+
+      - name: todo_current_wontdo_bucket
+        data_type: bigint
+        description: ""
+
+      - name: todo_done_streak
+        data_type: bigint
+        description: ""
+
+      - name: todo_wontdo_streak
+        data_type: bigint
+        description: ""
+
+      - name: todo_done_habit_bucket_id
+        data_type: bigint
+        description: ""
+
+      - name: todo_wontdo_habit_bucket_id
+        data_type: bigint
+        description: ""
+
+      - name: todo_id
+        data_type: text
+        description: ""
+
+      - name: todo_repeatflag
+        data_type: text
+        description: ""
+
+      - name: todo_repeattaskid
+        data_type: text
+        description: ""
+
+      - name: todo_status
+        data_type: text
+        description: ""
+
+      - name: todo_derived__is_repeat
+        data_type: boolean
+        description: ""
+
+      - name: todo_completedtime
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: todo_duedate
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: todo_deleted
+        data_type: boolean
+        description: ""

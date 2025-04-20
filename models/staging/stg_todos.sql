@@ -182,7 +182,7 @@ todo AS (
     SELECT
         *
     FROM
-        stg_todo_undone
+        init_todo
 ),
 lists AS (
     SELECT
@@ -267,8 +267,6 @@ FROM
     todo_completedtime >= todo_modifiedtime 
     AND todo_completedtime::date >= {{dbt_date.n_days_ago(7)}}
     )
-  OR
-   todo_derived__is_repeat is True -- full refresh all habit tasks 
   OR 
   todo_modifiedtime >= (select coalesce(max(todo_modifiedtime),'1900-01-01 00:00:00') from {{ this }} )
 {% endif %}
