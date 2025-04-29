@@ -1,6 +1,8 @@
 version: 2
 models:
   - name: rolling_counter
+    config:
+      enabled: true
     meta:
       joins:
         - join: dim_statuses

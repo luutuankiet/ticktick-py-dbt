@@ -1,3 +1,5 @@
+version: 2
+
 models:
   - name: stg_todos
     description: ""
@@ -38,26 +40,6 @@ models:
         data_type: text
         description: ""
 
-      - name: todo_title
-        data_type: text
-        description: ""
-
-      - name: todo_projectid
-        data_type: text
-        description: ""
-
-      - name: todo_derived__habit_streak
-        data_type: bigint
-        description: ""
-
-      - name: _todo__habit_streak_bucket_id
-        data_type: bigint
-        description: ""
-
-      - name: todo_derived__is_repeat
-        data_type: boolean
-        description: ""
-
       - name: todo_id
         data_type: text
         description: ""
@@ -86,8 +68,16 @@ models:
         data_type: timestamp without time zone
         description: ""
 
+      - name: todo_projectid
+        data_type: text
+        description: ""
+
       - name: todo_sortorder
         data_type: bigint
+        description: ""
+
+      - name: todo_title
+        data_type: text
         description: ""
 
       - name: todo_content
@@ -180,7 +170,9 @@ models:
 
       - name: todo_repeattaskid
         data_type: text
-        description: ""
+        description: | 
+          - Most of the time, the next task occurence.
+          - Is NOT a reliable way to pick out repeat items; some might have repeattaskId but are not repeat at all. (prolly due to extract script)"
 
       - name: todo_commentcount
         data_type: double precision
@@ -248,26 +240,6 @@ models:
 
       - name: todo_modifiedtime_derived_date
         data_type: date
-        description: ""
-
-      - name: _todo__habit_undone_streak_bucket_id
-        data_type: bigint
-        description: ""
-
-      - name: _status_lag
-        data_type: text
-        description: ""
-
-      - name: _status_lead
-        data_type: text
-        description: ""
-
-      - name: _todo_derived__consecutive_undone
-        data_type: bigint
-        description: ""
-
-      - name: todo_derived__consecutive_undone
-        data_type: bigint
         description: ""
 
       - name: todo_list_name

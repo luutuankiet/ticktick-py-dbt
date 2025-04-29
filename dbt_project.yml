@@ -6,6 +6,7 @@ model-paths: ["models"]
 seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
+analysis-paths: ["disabled"]
 
 models:
   todo_analytics:
@@ -17,12 +18,17 @@ models:
       base:
         # utilizing the strat to allow deleting completed data from src ticktick
         +tags: "base"
+      metrics:
+        +tags: "metrics"
+        enabled: false
+      
     marts:
       core:
         +materialized: table
         +tags: "core"
       metrics:
         +tags: "metrics"
+        enabled: false
 
 seeds:
   todo_analytics:

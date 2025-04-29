@@ -1,1031 +1,881 @@
 version: 2
+
 models:
   - name: obt
+    description: ""
     columns:
-      - name: todo_id
+      - name: todo_done_max_streak
+        data_type: bigint
         description: ""
-        data_tests:
-          - assert_unique_non_lookahead
-        meta:
-          dimension:
-            type: string
-      - name: todo_createdtime
+
+      - name: todo_done_total_attempts
+        data_type: bigint
         description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_completedtime
+
+      - name: todo_wontdo_bad_habit_flag
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_startdate
+
+      - name: todo_habit_is_active
+        data_type: boolean
         description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_duedate
+
+      - name: todo_current_done_bucket
+        data_type: bigint
         description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_projectid
+
+      - name: todo_current_wontdo_bucket
+        data_type: bigint
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_sortorder
+
+      - name: todo_done_streak
+        data_type: bigint
         description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_title
+
+      - name: todo_wontdo_streak
+        data_type: bigint
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_content
+
+      - name: todo_done_habit_bucket_id
+        data_type: bigint
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_desc
+
+      - name: todo_wontdo_habit_bucket_id
+        data_type: bigint
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_timezone
+
+      - name: todo_derived__is_repeat
+        data_type: boolean
         description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_isfloating
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: todo_isallday
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: todo_reminder
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: reminders
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_exdate
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_priority
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_status
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_items
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_progress
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_modifiedtime
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_etag
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_deleted
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: todo_creator
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_focussummaries
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_columnid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_kind
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_imgmode
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_tags
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_repeatfrom
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_attachments
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_repeattaskid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_commentcount
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_completeduserid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_repeatflag
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_pinnedtime
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: childids
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_deletedtime
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_repeatfirstdate
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_pomodorosummaries
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_parentid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_annoyingalert
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_createdtime_derived_date
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: todo_completedtime_derived_date
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: todo_startdate_derived_date
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: todo_duedate_derived_date
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: list_id
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_name
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_isowner
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: list_color
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_inall
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: list_sortorder
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: list_sortoption
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_sorttype
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_usercount
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: list_etag
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_modifiedtime
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: list_closed
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: list_muted
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: list_transferred
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_groupid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_viewmode
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_notificationoptions
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_teamid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_permission
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_kind
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_timeline
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_needaudit
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: list_barcodeneedaudit
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: list_opentoteam
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: list_teammemberpermission
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_source
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: list_created_time
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: list_isactive
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: folder_id
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: folder_etag
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: folder_name
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: folder_showall
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: folder_sortorder
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: folder_viewmode
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: folder_deleted
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: folder_userid
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: folder_sorttype
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: folder_sortoption
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: folder_teamid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: folder_timeline
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: status_id
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: status_desc
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: status_comments
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: start_date_id
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: start_day_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: start_week_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: start_week_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: start_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: start_iso_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: start_day_name
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: start_first_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: start_last_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: start_month_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: start_month_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: start_day_of_month
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: start_month_name_short
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: start_month_name
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: start_first_day_of_month
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: start_last_day_of_month
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: start_quarter_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: start_quarter_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: start_day_of_quarter
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: start_quarter_desc_short
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: start_quarter_desc
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: start_first_day_of_quarter
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: start_last_day_of_quarter
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: start_year_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: start_first_day_of_year
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: start_last_day_of_year
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: start_ordinal_weekday_of_month
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_date_id
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: due_day_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_week_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_week_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_iso_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_day_name
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: due_first_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: due_last_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: due_month_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_month_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_day_of_month
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_month_name_short
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: due_month_name
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: due_first_day_of_month
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: due_last_day_of_month
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: due_quarter_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_quarter_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_day_of_quarter
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_quarter_desc_short
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: due_quarter_desc
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: due_first_day_of_quarter
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: due_last_day_of_quarter
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: due_year_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: due_first_day_of_year
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: due_last_day_of_year
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: due_ordinal_weekday_of_month
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_date_id
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: completed_day_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_week_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_week_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_iso_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_day_name
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: completed_first_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: completed_last_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: completed_month_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_month_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_day_of_month
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_month_name_short
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: completed_month_name
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: completed_first_day_of_month
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: completed_last_day_of_month
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: completed_quarter_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_quarter_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_day_of_quarter
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_quarter_desc_short
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: completed_quarter_desc
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: completed_first_day_of_quarter
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: completed_last_day_of_quarter
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: completed_year_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: completed_first_day_of_year
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: completed_last_day_of_year
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: completed_ordinal_weekday_of_month
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_date_id
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: created_day_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_week_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_week_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_iso_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_day_name
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: created_first_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: created_last_day_of_week
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: created_month_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_month_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_day_of_month
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_month_name_short
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: created_month_name
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: created_first_day_of_month
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: created_last_day_of_month
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: created_quarter_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_quarter_of_year
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_day_of_quarter
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_quarter_desc_short
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: created_quarter_desc
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: created_first_day_of_quarter
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: created_last_day_of_quarter
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: created_year_key
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: created_first_day_of_year
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: created_last_day_of_year
-        description: ""
-        meta:
-          dimension:
-            type: date
-      - name: created_ordinal_weekday_of_month
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: date_due_lookahead_key
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: lookahead_flag
-        description: ""
-        meta:
-          dimension:
-            type: boolean
+
       - name: date_modified_key
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
+
+      - name: todo_id
+        data_type: text
+        description: ""
+
+      - name: todo_completedtime
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: todo_startdate
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: todo_duedate
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: todo_modifiedtime
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: todo_createdtime
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: todo_repeatfirstdate
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: todo_projectid
+        data_type: text
+        description: ""
+
+      - name: todo_sortorder
+        data_type: bigint
+        description: ""
+
+      - name: todo_title
+        data_type: text
+        description: ""
+
+      - name: todo_content
+        data_type: text
+        description: ""
+
+      - name: todo_desc
+        data_type: text
+        description: ""
+
+      - name: todo_timezone
+        data_type: text
+        description: ""
+
+      - name: todo_isfloating
+        data_type: boolean
+        description: ""
+
+      - name: todo_isallday
+        data_type: boolean
+        description: ""
+
+      - name: todo_reminder
+        data_type: text
+        description: ""
+
+      - name: reminders
+        data_type: text
+        description: ""
+
+      - name: todo_exdate
+        data_type: text
+        description: ""
+
+      - name: todo_priority
+        data_type: integer
+        description: ""
+
+      - name: todo_status
+        data_type: text
+        description: ""
+
+      - name: todo_items
+        data_type: text
+        description: ""
+
+      - name: todo_progress
+        data_type: double precision
+        description: ""
+
+      - name: todo_etag
+        data_type: text
+        description: ""
+
+      - name: todo_deleted
+        data_type: boolean
+        description: ""
+
+      - name: todo_creator
+        data_type: integer
+        description: ""
+
+      - name: todo_focussummaries
+        data_type: text
+        description: ""
+
+      - name: todo_columnid
+        data_type: text
+        description: ""
+
+      - name: todo_kind
+        data_type: text
+        description: ""
+
+      - name: todo_imgmode
+        data_type: text
+        description: ""
+
+      - name: todo_tags
+        data_type: text
+        description: ""
+
+      - name: todo_repeatfrom
+        data_type: integer
+        description: ""
+
+      - name: todo_attachments
+        data_type: text
+        description: ""
+
+      - name: todo_repeattaskid
+        data_type: text
+        description: ""
+
+      - name: todo_commentcount
+        data_type: double precision
+        description: ""
+
+      - name: todo_completeduserid
+        data_type: text
+        description: ""
+
+      - name: todo_repeatflag
+        data_type: text
+        description: ""
+
+      - name: todo_pinnedtime
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: childids
+        data_type: text
+        description: ""
+
+      - name: todo_deletedtime
+        data_type: text
+        description: ""
+
+      - name: todo_pomodorosummaries
+        data_type: text
+        description: ""
+
+      - name: todo_parentid
+        data_type: text
+        description: ""
+
+      - name: todo_annoyingalert
+        data_type: text
+        description: ""
+
       - name: todo_modifiedtime_humanize
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
+
       - name: todo_duedate_humanize
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
+
       - name: rn
+        data_type: bigint
         description: ""
-        meta:
-          dimension:
-            type: number
+
+      - name: todo_createdtime_derived_date
+        data_type: date
+        description: ""
+
+      - name: todo_completedtime_derived_date
+        data_type: date
+        description: ""
+
+      - name: todo_startdate_derived_date
+        data_type: date
+        description: ""
+
+      - name: todo_duedate_derived_date
+        data_type: date
+        description: ""
+
       - name: todo_modifiedtime_derived_date
+        data_type: date
         description: ""
-        meta:
-          dimension:
-            type: date
-      - name: todo_derived__recurring
+
+      - name: todo_list_name
+        data_type: text
         description: ""
-        meta:
-          dimension:
-            type: string
+
+      - name: todo_folder_name
+        data_type: text
+        description: ""
+
+      - name: _modified_time
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: date_due_lookahead_key
+        data_type: text
+        description: ""
+
+      - name: todo_lookahead_skey
+        data_type: text
+        description: ""
+
+      - name: lookahead_flag
+        data_type: boolean
+        description: ""
+
+      - name: list_id
+        data_type: text
+        description: ""
+
+      - name: list_name
+        data_type: text
+        description: ""
+
+      - name: list_isowner
+        data_type: boolean
+        description: ""
+
+      - name: list_color
+        data_type: text
+        description: ""
+
+      - name: list_inall
+        data_type: boolean
+        description: ""
+
+      - name: list_sortorder
+        data_type: bigint
+        description: ""
+
+      - name: list_sortoption
+        data_type: text
+        description: ""
+
+      - name: list_sorttype
+        data_type: text
+        description: ""
+
+      - name: list_usercount
+        data_type: integer
+        description: ""
+
+      - name: list_etag
+        data_type: text
+        description: ""
+
+      - name: list_modifiedtime
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: list_closed
+        data_type: boolean
+        description: ""
+
+      - name: list_muted
+        data_type: boolean
+        description: ""
+
+      - name: list_transferred
+        data_type: text
+        description: ""
+
+      - name: list_groupid
+        data_type: text
+        description: ""
+
+      - name: list_viewmode
+        data_type: text
+        description: ""
+
+      - name: list_notificationoptions
+        data_type: text
+        description: ""
+
+      - name: list_teamid
+        data_type: text
+        description: ""
+
+      - name: list_permission
+        data_type: text
+        description: ""
+
+      - name: list_kind
+        data_type: text
+        description: ""
+
+      - name: list_timeline
+        data_type: text
+        description: ""
+
+      - name: list_needaudit
+        data_type: boolean
+        description: ""
+
+      - name: list_barcodeneedaudit
+        data_type: boolean
+        description: ""
+
+      - name: list_opentoteam
+        data_type: boolean
+        description: ""
+
+      - name: list_teammemberpermission
+        data_type: text
+        description: ""
+
+      - name: list_source
+        data_type: text
+        description: ""
+
+      - name: list_created_time
+        data_type: timestamp without time zone
+        description: ""
+
+      - name: list_isactive
+        data_type: boolean
+        description: ""
+
+      - name: folder_id
+        data_type: text
+        description: ""
+
+      - name: folder_etag
+        data_type: text
+        description: ""
+
+      - name: folder_name
+        data_type: text
+        description: ""
+
+      - name: folder_showall
+        data_type: boolean
+        description: ""
+
+      - name: folder_sortorder
+        data_type: bigint
+        description: ""
+
+      - name: folder_viewmode
+        data_type: text
+        description: ""
+
+      - name: folder_deleted
+        data_type: boolean
+        description: ""
+
+      - name: folder_userid
+        data_type: integer
+        description: ""
+
+      - name: folder_sorttype
+        data_type: text
+        description: ""
+
+      - name: folder_sortoption
+        data_type: text
+        description: ""
+
+      - name: folder_teamid
+        data_type: text
+        description: ""
+
+      - name: folder_timeline
+        data_type: text
+        description: ""
+
+      - name: status_id
+        data_type: text
+        description: ""
+
+      - name: status_desc
+        data_type: text
+        description: ""
+
+      - name: status_comments
+        data_type: text
+        description: ""
+
+      - name: start_date_id
+        data_type: date
+        description: ""
+
+      - name: start_day_of_year
+        data_type: integer
+        description: ""
+
+      - name: start_week_key
+        data_type: integer
+        description: ""
+
+      - name: start_week_of_year
+        data_type: integer
+        description: ""
+
+      - name: start_day_of_week
+        data_type: integer
+        description: ""
+
+      - name: start_iso_day_of_week
+        data_type: integer
+        description: ""
+
+      - name: start_day_name
+        data_type: text
+        description: ""
+
+      - name: start_first_day_of_week
+        data_type: date
+        description: ""
+
+      - name: start_last_day_of_week
+        data_type: date
+        description: ""
+
+      - name: start_month_key
+        data_type: integer
+        description: ""
+
+      - name: start_month_of_year
+        data_type: integer
+        description: ""
+
+      - name: start_day_of_month
+        data_type: integer
+        description: ""
+
+      - name: start_month_name_short
+        data_type: text
+        description: ""
+
+      - name: start_month_name
+        data_type: text
+        description: ""
+
+      - name: start_first_day_of_month
+        data_type: date
+        description: ""
+
+      - name: start_last_day_of_month
+        data_type: date
+        description: ""
+
+      - name: start_quarter_key
+        data_type: integer
+        description: ""
+
+      - name: start_quarter_of_year
+        data_type: integer
+        description: ""
+
+      - name: start_day_of_quarter
+        data_type: integer
+        description: ""
+
+      - name: start_quarter_desc_short
+        data_type: text
+        description: ""
+
+      - name: start_quarter_desc
+        data_type: text
+        description: ""
+
+      - name: start_first_day_of_quarter
+        data_type: date
+        description: ""
+
+      - name: start_last_day_of_quarter
+        data_type: date
+        description: ""
+
+      - name: start_year_key
+        data_type: integer
+        description: ""
+
+      - name: start_first_day_of_year
+        data_type: date
+        description: ""
+
+      - name: start_last_day_of_year
+        data_type: date
+        description: ""
+
+      - name: start_ordinal_weekday_of_month
+        data_type: integer
+        description: ""
+
+      - name: due_date_id
+        data_type: date
+        description: ""
+
+      - name: due_day_of_year
+        data_type: integer
+        description: ""
+
+      - name: due_week_key
+        data_type: integer
+        description: ""
+
+      - name: due_week_of_year
+        data_type: integer
+        description: ""
+
+      - name: due_day_of_week
+        data_type: integer
+        description: ""
+
+      - name: due_iso_day_of_week
+        data_type: integer
+        description: ""
+
+      - name: due_day_name
+        data_type: text
+        description: ""
+
+      - name: due_first_day_of_week
+        data_type: date
+        description: ""
+
+      - name: due_last_day_of_week
+        data_type: date
+        description: ""
+
+      - name: due_month_key
+        data_type: integer
+        description: ""
+
+      - name: due_month_of_year
+        data_type: integer
+        description: ""
+
+      - name: due_day_of_month
+        data_type: integer
+        description: ""
+
+      - name: due_month_name_short
+        data_type: text
+        description: ""
+
+      - name: due_month_name
+        data_type: text
+        description: ""
+
+      - name: due_first_day_of_month
+        data_type: date
+        description: ""
+
+      - name: due_last_day_of_month
+        data_type: date
+        description: ""
+
+      - name: due_quarter_key
+        data_type: integer
+        description: ""
+
+      - name: due_quarter_of_year
+        data_type: integer
+        description: ""
+
+      - name: due_day_of_quarter
+        data_type: integer
+        description: ""
+
+      - name: due_quarter_desc_short
+        data_type: text
+        description: ""
+
+      - name: due_quarter_desc
+        data_type: text
+        description: ""
+
+      - name: due_first_day_of_quarter
+        data_type: date
+        description: ""
+
+      - name: due_last_day_of_quarter
+        data_type: date
+        description: ""
+
+      - name: due_year_key
+        data_type: integer
+        description: ""
+
+      - name: due_first_day_of_year
+        data_type: date
+        description: ""
+
+      - name: due_last_day_of_year
+        data_type: date
+        description: ""
+
+      - name: due_ordinal_weekday_of_month
+        data_type: integer
+        description: ""
+
+      - name: completed_date_id
+        data_type: date
+        description: ""
+
+      - name: completed_day_of_year
+        data_type: integer
+        description: ""
+
+      - name: completed_week_key
+        data_type: integer
+        description: ""
+
+      - name: completed_week_of_year
+        data_type: integer
+        description: ""
+
+      - name: completed_day_of_week
+        data_type: integer
+        description: ""
+
+      - name: completed_iso_day_of_week
+        data_type: integer
+        description: ""
+
+      - name: completed_day_name
+        data_type: text
+        description: ""
+
+      - name: completed_first_day_of_week
+        data_type: date
+        description: ""
+
+      - name: completed_last_day_of_week
+        data_type: date
+        description: ""
+
+      - name: completed_month_key
+        data_type: integer
+        description: ""
+
+      - name: completed_month_of_year
+        data_type: integer
+        description: ""
+
+      - name: completed_day_of_month
+        data_type: integer
+        description: ""
+
+      - name: completed_month_name_short
+        data_type: text
+        description: ""
+
+      - name: completed_month_name
+        data_type: text
+        description: ""
+
+      - name: completed_first_day_of_month
+        data_type: date
+        description: ""
+
+      - name: completed_last_day_of_month
+        data_type: date
+        description: ""
+
+      - name: completed_quarter_key
+        data_type: integer
+        description: ""
+
+      - name: completed_quarter_of_year
+        data_type: integer
+        description: ""
+
+      - name: completed_day_of_quarter
+        data_type: integer
+        description: ""
+
+      - name: completed_quarter_desc_short
+        data_type: text
+        description: ""
+
+      - name: completed_quarter_desc
+        data_type: text
+        description: ""
+
+      - name: completed_first_day_of_quarter
+        data_type: date
+        description: ""
+
+      - name: completed_last_day_of_quarter
+        data_type: date
+        description: ""
+
+      - name: completed_year_key
+        data_type: integer
+        description: ""
+
+      - name: completed_first_day_of_year
+        data_type: date
+        description: ""
+
+      - name: completed_last_day_of_year
+        data_type: date
+        description: ""
+
+      - name: completed_ordinal_weekday_of_month
+        data_type: integer
+        description: ""
+
+      - name: created_date_id
+        data_type: date
+        description: ""
+
+      - name: created_day_of_year
+        data_type: integer
+        description: ""
+
+      - name: created_week_key
+        data_type: integer
+        description: ""
+
+      - name: created_week_of_year
+        data_type: integer
+        description: ""
+
+      - name: created_day_of_week
+        data_type: integer
+        description: ""
+
+      - name: created_iso_day_of_week
+        data_type: integer
+        description: ""
+
+      - name: created_day_name
+        data_type: text
+        description: ""
+
+      - name: created_first_day_of_week
+        data_type: date
+        description: ""
+
+      - name: created_last_day_of_week
+        data_type: date
+        description: ""
+
+      - name: created_month_key
+        data_type: integer
+        description: ""
+
+      - name: created_month_of_year
+        data_type: integer
+        description: ""
+
+      - name: created_day_of_month
+        data_type: integer
+        description: ""
+
+      - name: created_month_name_short
+        data_type: text
+        description: ""
+
+      - name: created_month_name
+        data_type: text
+        description: ""
+
+      - name: created_first_day_of_month
+        data_type: date
+        description: ""
+
+      - name: created_last_day_of_month
+        data_type: date
+        description: ""
+
+      - name: created_quarter_key
+        data_type: integer
+        description: ""
+
+      - name: created_quarter_of_year
+        data_type: integer
+        description: ""
+
+      - name: created_day_of_quarter
+        data_type: integer
+        description: ""
+
+      - name: created_quarter_desc_short
+        data_type: text
+        description: ""
+
+      - name: created_quarter_desc
+        data_type: text
+        description: ""
+
+      - name: created_first_day_of_quarter
+        data_type: date
+        description: ""
+
+      - name: created_last_day_of_quarter
+        data_type: date
+        description: ""
+
+      - name: created_year_key
+        data_type: integer
+        description: ""
+
+      - name: created_first_day_of_year
+        data_type: date
+        description: ""
+
+      - name: created_last_day_of_year
+        data_type: date
+        description: ""
+
+      - name: created_ordinal_weekday_of_month
+        data_type: integer
+        description: ""
