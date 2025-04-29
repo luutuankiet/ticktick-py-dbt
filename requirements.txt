@@ -1,3 +1,4 @@
 dbt-core==1.9.1
 dbt-postgres==1.9.0
 git+https://github.com/Bilbottom/dbt-py@v0.0.3
+ruamel.yaml
