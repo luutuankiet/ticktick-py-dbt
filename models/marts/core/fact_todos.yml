@@ -132,7 +132,7 @@ models:
         meta:
           dimension:
             hidden: true
-            type: string
+            type: string      
       - name: todo_id
         description: |
           note when joined with lookahead dates:
@@ -142,6 +142,163 @@ models:
         meta:
           dimension:
             type: string
+          additional_dimensions:
+            todo_derived__tags:
+              description: the tags parsed from tasks.
+              # hidden: true
+              groups: ['derived']
+              type: string
+              sql: >-
+                TRIM(BOTH ' ' FROM REPLACE(REPLACE(REPLACE(${todo_tags}, '[',
+                ''), ']', ''), '''', ''))
+            todo_derived__tag_semantic:
+              groups:
+                - derived
+              label: tag semantic
+              type: string
+              sql: >
+                case when ${todo_tags} like '%clarifyme%' then 'inbox v1' 
+
+                when ${todo_tags} = 'default' then 'inbox' 
+
+                -- when (${todo_tags} = 'default' or ${todo_tags} like '%@%') then
+                'next action v1'
+
+                when (${todo_tags} like '%clarified%' or ${todo_tags} like '%@%')
+                then 'next action'
+
+                when ${todo_tags} like '%someday%' then 'someday'
+
+                when ${todo_tags} like '%waiting_for%' then 'waiting for' 
+
+                when ${todo_tags} like '%tickler%' then 'tickler' 
+
+                else TRIM(BOTH ' ' FROM REPLACE(REPLACE(REPLACE(${todo_tags}, '[',
+                ''), ']', ''), '''', ''))      
+                end            
+            todo_derived__is_task:
+              description: derived from custom sql logic
+              groups:
+                - derived
+              label: is task
+              type: boolean
+              sql: >-
+                case when NOT (${todo_kind} = 'NOTE' or ${todo_tags} like
+                '%tickler%') then true else false end      
+            todo_derived__is_active:
+              description: >
+                the item belongs to an active folder - not in ('🚀SOMEDAY
+                lists','🛩Horizon of focus','💤on hold lists')
+              label: is active
+              groups:
+                - derived
+              type: boolean
+              sql: >
+                case when ${dim_folders.folder_name} not in ('🚀SOMEDAY
+                lists','🛩Horizon of focus','💤on hold lists') 
+
+                AND
+
+                ${dim_lists.list_name} not in ('🧳SOMEDAY','📍ref - tickler notes
+                for the day')
+
+                then true else false end      
+            todo_derived__unplanned:
+              description: >
+                tasks that are due on the same day they are created OR done on the
+                same day created
+              label: unplanned flag
+              groups:
+                - derived
+              type: string
+              sql: >
+                case when 
+
+                (${dim_statuses.status_desc} = 'undone' AND
+                ${created_date.date_id} != ${due_date.date_id} )
+
+                OR 
+
+                (${dim_statuses.status_desc} in ('done', 'wont do') AND
+                ${created_date.date_id} != ${completed_date.date_id} )
+
+                then 'planned' 
+
+                when ${dim_statuses.status_desc} not in ('undone', 'done','wont
+                do') then 'default'
+
+                else 'unplanned' end        
+            todo_derived__overdue:
+          description: |
+            tasks that are due compared to current date
+          meta:
+            dimension:
+              label: overdue?
+              groups:
+                - derived
+              type: boolean
+              sql: >
+                date_trunc('DAY',${due_date.date_id_day}) <
+                date_trunc('DAY',current_timestamp)
+            todo_derived__repeat_semantic:
+              description: >
+                flag if the task is a repeat. so that i can drill down & not getting
+                error from a custom dimension field
+              label: repeat_semantic
+              groups:
+                - derived
+              type: string
+              sql: >
+                case when ${fact_todos.todo_derived__is_repeat} is true then
+                'repeat' else '' end
+            dummy:
+              description: dummy column for drill down purposes
+              groups:
+                - boilerplate
+              type: string
+              sql: case when 1=1 then '' else null end
+            todo_derived__habit_repeat_freq:
+              description: "identifies as 3 categories : daily, monthly and all other"
+              groups:
+                - derived
+              type: string
+              label: "repeat frequency"
+              sql: |
+                case when ${todo_repeatflag} like '%DAILY%' then 'daily'
+                when ${todo_repeatflag} like '%WEEKLY%' then 'weekly'
+                when ${todo_repeatflag} like '%MONTHLY%' then 'monthly'
+                when ${todo_repeatflag} like '%CUSTOM%' then 'custom'
+                else 'default'
+                end
+            habit_date:
+              description: "wrapper for habit heat map to always anchor to today & show
+                NULL if not done today"
+              groups: ['habit']
+              type: date
+              label: "habit date"
+              sql: |
+                ${due_date.date_id_day}
+            habit_week:
+              groups: ['habit']
+              type: number
+              label: "habit week"
+              sql: |
+                ${due_date.week_of_year}
+            habit_day:
+              groups: ['habit']
+              type: string
+              label: "habit day"
+              sql: |-
+                ${due_date.day_name} 
+            todo_is_time_sensitive:
+              description: "flag if the due date is time sensitive."
+              type: boolean
+              sql: |
+                case when 
+                extract(HOUR from todo_duedate) = 0 and 
+                extract(MINUTE from todo_duedate) = 0 then false else true end
+            
+
           metrics:
             lookahead_norepeat_count:
               groups: ['lookahead']
@@ -273,34 +430,52 @@ models:
                   - wont do
                 - todo_derived__is_task: true
                 - todo_derived__tag_semantic: next action
-            habit_streak_metric:
-              description: "helper pre-agg to allow hiding status in habit_streak when pivotting"
-              groups: ['habit']
-              label: "streak"
-              type: average
-              sql: todo_derived__habit_streak
 
-      - name: todo_derived__habit_streak
-        description: rolling streak of habit that +1 of each consecutive done items.
-        meta:
-          dimension:
-            groups: ['habit']
-            hidden: true
-            type: number
 
-      - name: todo_derived__consecutive_undone
-        meta:
-          dimension:
-            description: building block to later be summed up for analysis if task is consecutively undone
-            groups: ['derived']
-            # hidden: true
-            type: number
-            sql: todo_derived__consecutive_undone
-          # metrics:
-          #   consecutive_undone:
-          #     groups: ['habit']
-          #     type: sum
-          #     sql: ${fact_todos.todo_derived__consecutive_undone}
+      - name: todo_done_max_streak
+        data_type: bigint
+        description: ""
+
+      - name: todo_done_total_attempts
+        data_type: bigint
+        description: ""
+
+      - name: todo_wontdo_bad_habit_flag
+        data_type: text
+        description: ""
+
+      - name: todo_habit_is_active
+        data_type: boolean
+        description: ""
+
+      - name: todo_current_done_bucket
+        data_type: bigint
+        description: ""
+
+      - name: todo_current_wontdo_bucket
+        data_type: bigint
+        description: ""
+
+      - name: todo_done_streak
+        data_type: bigint
+        description: ""
+
+      - name: todo_wontdo_streak
+        data_type: bigint
+        description: ""
+
+      - name: todo_done_habit_bucket_id
+        data_type: bigint
+        description: ""
+
+      - name: todo_wontdo_habit_bucket_id
+        data_type: bigint
+        description: ""
+
+      - name: todo_derived__is_repeat
+        data_type: boolean
+        description: ""
+
       - name: todo_createdtime
         description: ""
         meta:
@@ -325,15 +500,6 @@ models:
           dimension:
             # hidden: true
             type: timestamp
-          additional_dimensions:
-            todo_is_time_sensitive:
-              description: "flag if the due date is time sensitive."
-              type: boolean
-              sql: |
-                case when 
-                extract(HOUR from todo_duedate) = 0 and 
-                extract(MINUTE from todo_duedate) = 0 then false else true end
-            
             
       - name: todo_projectid
         description: ""
@@ -496,9 +662,13 @@ models:
       - name: todo_tags
         description: ""
         meta:
+          metrics:
+            tags_count:
+              type: count        
           dimension:
             hidden: true
             type: string
+        
       - name: todo_repeatfrom
         description: ""
         meta:
@@ -631,140 +801,6 @@ models:
           dimension:
             # hidden: true
             type: boolean
-# DERIVED DIMS
-      - name: todo_derived__tags
-        description: the tags parsed from tasks.
-        meta:
-          dimension:
-            # hidden: true
-            groups: ['derived']
-            type: string
-            sql: >-
-              TRIM(BOTH ' ' FROM REPLACE(REPLACE(REPLACE(${todo_tags}, '[',
-              ''), ']', ''), '''', ''))
-      - name: todo_derived__tag_semantic
-        meta:
-          dimension:
-            groups:
-              - derived
-            label: tag semantic
-            type: string
-            sql: >
-              case when ${todo_tags} like '%clarifyme%' then 'inbox v1' 
-
-              when ${todo_tags} = 'default' then 'inbox' 
-
-              -- when (${todo_tags} = 'default' or ${todo_tags} like '%@%') then
-              'next action v1'
-
-              when (${todo_tags} like '%clarified%' or ${todo_tags} like '%@%')
-              then 'next action'
-
-              when ${todo_tags} like '%someday%' then 'someday'
-
-              when ${todo_tags} like '%waiting_for%' then 'waiting for' 
-
-              when ${todo_tags} like '%tickler%' then 'tickler' 
-
-              else TRIM(BOTH ' ' FROM REPLACE(REPLACE(REPLACE(${todo_tags}, '[',
-              ''), ']', ''), '''', ''))      
-
-              end
-          metrics:
-            tags_count:
-              type: count
-        description: ""
-      - name: todo_derived__is_task
-        description: derived from custom sql logic
-        meta:
-          dimension:
-            groups:
-              - derived
-            label: is task
-            type: boolean
-            sql: >-
-              case when NOT (${todo_kind} = 'NOTE' or ${todo_tags} like
-              '%tickler%') then true else false end
-      - name: todo_derived__is_active
-        description: >
-          the item belongs to an active folder - not in ('🚀SOMEDAY
-          lists','🛩Horizon of focus','💤on hold lists')
-        meta:
-          dimension:
-            label: is active
-            groups:
-              - derived
-            type: boolean
-            sql: >
-              case when ${dim_folders.folder_name} not in ('🚀SOMEDAY
-              lists','🛩Horizon of focus','💤on hold lists') 
-
-              AND
-
-              ${dim_lists.list_name} not in ('🧳SOMEDAY','📍ref - tickler notes
-              for the day')
-
-              then true else false end
-      - name: todo_derived__unplanned
-        description: >
-          tasks that are due on the same day they are created OR done on the
-          same day created
-        meta:
-          dimension:
-            label: unplanned flag
-            groups:
-              - derived
-            type: string
-            sql: >
-              case when 
-
-              (${dim_statuses.status_desc} = 'undone' AND
-              ${created_date.date_id} != ${due_date.date_id} )
-
-              OR 
-
-              (${dim_statuses.status_desc} in ('done', 'wont do') AND
-              ${created_date.date_id} != ${completed_date.date_id} )
-
-              then 'planned' 
-
-              when ${dim_statuses.status_desc} not in ('undone', 'done','wont
-              do') then 'default'
-
-              else 'unplanned' end
-      - name: todo_derived__overdue
-        description: |
-          tasks that are due compared to current date
-        meta:
-          dimension:
-            label: overdue?
-            groups:
-              - derived
-            type: boolean
-            sql: >
-              date_trunc('DAY',${due_date.date_id_day}) <
-              date_trunc('DAY',current_timestamp)
-      - name: todo_derived__repeat_semantic
-        description: >
-          flag if the task is a repeat. so that i can drill down & not getting
-          error from a custom dimension field
-        meta:
-          dimension:
-            label: repeat_semantic
-            groups:
-              - derived
-            type: string
-            sql: >
-              case when ${fact_todos.todo_derived__is_repeat} is true then
-              'repeat' else '' end
-      - name: dummy
-        description: dummy column for drill down purposes
-        meta:
-          dimension:
-            groups:
-              - boilerplate
-            type: string
-            sql: case when 1=1 then '' else null end
       - name: rn
         description: ""
         meta:
@@ -784,43 +820,3 @@ models:
             groups: 
               - derived
             type: boolean
-      - name: todo_derived__habit_repeat_freq
-        description: "identifies as 3 categories : daily, monthly and all other"
-        meta:
-          dimension:
-            groups: 
-              - derived
-            type: string
-            label: "repeat frequency" 
-            sql: |
-              case when ${todo_repeatflag} like '%DAILY%' then 'daily'
-              when ${todo_repeatflag} like '%WEEKLY%' then 'weekly'
-              when ${todo_repeatflag} like '%MONTHLY%' then 'monthly'
-              when ${todo_repeatflag} like '%CUSTOM%' then 'custom'
-              else 'default'
-              end
-      - name: habit_date
-        description: "wrapper for habit heat map to always anchor to today & show NULL if not done today"
-        meta: 
-         dimension:
-          groups: ['habit']
-          type: date
-          label: "habit date"
-          sql: |
-            ${due_date.date_id_day}
-      - name: habit_week
-        meta: 
-         dimension:
-          groups: ['habit']
-          type: number
-          label: "habit week"
-          sql: |
-            ${due_date.week_of_year}
-      - name: habit_day
-        meta: 
-         dimension:
-          groups: ['habit']
-          type: string
-          label: "habit day"
-          sql: |
-            ${due_date.day_name} 
