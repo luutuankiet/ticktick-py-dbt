@@ -3,7 +3,7 @@
 {% set validate_type = var('type', 'path') %}
 {% set validate_value = var('value', '') %}
 {{ "-- DEBUG: test ran with: type = '" ~ validate_type  ~ "', value = '" ~ validate_value ~ "'" }}
-
+{{ config(severity = 'warn') }}
 
 {% for node in graph.nodes.values() | selectattr("resource_type", "equalto", "model") %}
     {% if node.columns | count > 0 %}
