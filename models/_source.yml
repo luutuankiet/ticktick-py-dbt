@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: raw_data
     description: A replica of the extracted ticktick data.
-    database: "{{env_var('DW_DBNAME')}}"
+    database: "{{env_var('DW_DBNAME','gtd_dash')}}"
     schema: "prod_raw"
     tables:
       - name: tasks_raw

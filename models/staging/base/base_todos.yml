@@ -1,238 +1,261 @@
 version: 2
 models:
   - name: base_todos
+    tests:
+      - dbt_utils.expression_is_true:
+          name: "verify_correct_relationship_status_and_completed_time"
+          expression: |
+            (todo_status = '0' AND todo_completedtime is null)
+            OR 
+            (todo_status in ('-1','2','1') AND todo_completedtime is not null)
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - todo_id
+            - todo_completedtime
     columns:
       - name: todo_id
-        description: ""
         data_tests:
-          - unique
           - not_null
+          - unique
         meta:
           dimension:
             type: string
-        
-      - name: todo_createdtime
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_completedtime
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_startdate
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_duedate
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_projectid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_sortorder
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_title
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_content
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_desc
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_timezone
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_isfloating
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: todo_isallday
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: todo_reminder
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: reminders
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_exdate
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_priority
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_status
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_items
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_progress
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_modifiedtime
-        description: ""
-        meta:
-          dimension:
-            type: timestamp
-      - name: todo_etag
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_deleted
-        description: ""
-        meta:
-          dimension:
-            type: boolean
-      - name: todo_creator
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_focussummaries
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_columnid
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_kind
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_imgmode
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_tags
-        description: ""
-        meta:
-          dimension:
-            type: string
-      - name: todo_repeatfrom
-        description: ""
-        meta:
-          dimension:
-            type: number
-      - name: todo_attachments
-        description: ""
-        meta:
-          dimension:
-            type: string
+        data_type: text
       - name: todo_repeattaskid
-        description: ""
+        description: |-
+          - Most of the time, the next task occurence.
+          - Is NOT a reliable way to pick out repeat items; some might have repeattaskId but are not repeat at all. (prolly due to extract script)
         meta:
           dimension:
             type: string
-      - name: todo_commentcount
-        description: ""
+        data_type: text
+
+      - name: todo_createdtime
+        meta:
+          dimension:
+            type: timestamp
+        data_type: timestamp without time zone
+      - name: todo_completedtime
+        meta:
+          dimension:
+            type: timestamp
+        data_type: timestamp without time zone
+      - name: todo_startdate
+        meta:
+          dimension:
+            type: timestamp
+        data_type: timestamp without time zone
+      - name: todo_duedate
+        meta:
+          dimension:
+            type: timestamp
+        data_type: timestamp without time zone
+      - name: todo_projectid
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_sortorder
         meta:
           dimension:
             type: number
+        data_type: bigint
+      - name: todo_title
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_content
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_desc
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_timezone
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_isfloating
+        meta:
+          dimension:
+            type: boolean
+        data_type: boolean
+      - name: todo_isallday
+        meta:
+          dimension:
+            type: boolean
+        data_type: boolean
+      - name: todo_reminder
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: reminders
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_exdate
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_priority
+        meta:
+          dimension:
+            type: number
+        data_type: integer
+      - name: todo_status
+        meta:
+          dimension:
+            type: string
+        data_type: text
+
+      - name: todo_items
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_progress
+        meta:
+          dimension:
+            type: number
+        data_type: double precision
+      - name: todo_modifiedtime
+        meta:
+          dimension:
+            type: timestamp
+        data_type: timestamp without time zone
+      - name: todo_etag
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_deleted
+        meta:
+          dimension:
+            type: boolean
+        data_type: boolean
+      - name: todo_creator
+        meta:
+          dimension:
+            type: number
+        data_type: integer
+      - name: todo_focussummaries
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_columnid
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_kind
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_imgmode
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_tags
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_repeatfrom
+        meta:
+          dimension:
+            type: number
+        data_type: integer
+      - name: todo_attachments
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_commentcount
+        meta:
+          dimension:
+            type: number
+        data_type: double precision
       - name: todo_completeduserid
-        description: ""
         meta:
           dimension:
             type: string
+        data_type: text
       - name: todo_repeatflag
-        description: ""
         meta:
           dimension:
             type: string
+        data_type: text
       - name: todo_pinnedtime
-        description: ""
         meta:
           dimension:
             type: timestamp
+        data_type: timestamp without time zone
       - name: childids
-        description: ""
         meta:
           dimension:
             type: string
+        data_type: text
       - name: todo_deletedtime
-        description: ""
         meta:
           dimension:
             type: string
+        data_type: text
       - name: todo_repeatfirstdate
-        description: ""
         meta:
           dimension:
             type: timestamp
+        data_type: timestamp without time zone
       - name: todo_pomodorosummaries
-        description: ""
         meta:
           dimension:
             type: string
+        data_type: text
       - name: todo_parentid
-        description: ""
         meta:
           dimension:
             type: string
+        data_type: text
       - name: todo_annoyingalert
-        description: ""
         meta:
           dimension:
             type: string
+        data_type: text
       - name: todo_createdtime_derived_date
-        description: ""
         meta:
           dimension:
             type: date
+        data_type: date
       - name: todo_completedtime_derived_date
-        description: ""
         meta:
           dimension:
             type: date
+        data_type: date
       - name: todo_startdate_derived_date
-        description: ""
         meta:
           dimension:
             type: date
+        data_type: date
       - name: todo_duedate_derived_date
-        description: ""
         meta:
           dimension:
             type: date
+        data_type: date
+      - name: todo_modifiedtime_humanize
+        data_type: text
+      - name: todo_duedate_humanize
+        data_type: text
+      - name: rn
+        data_type: bigint
+      - name: todo_modifiedtime_derived_date
+        data_type: date

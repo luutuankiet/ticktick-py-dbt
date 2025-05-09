@@ -2,7 +2,7 @@ version: 2
 models:
   - name: stg_lvl3
     columns:
-      - name: goal_name
+      - name: goal
         description: ""
         meta:
           dimension:

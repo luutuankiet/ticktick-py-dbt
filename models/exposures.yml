@@ -1,0 +1,19 @@
+version: 2
+
+exposures:
+  - name: gtd_dash
+    type: dashboard
+    maturity: medium
+    description: "my main gtd dashboard on lightdash."
+    depends_on:
+      - ref("dim_dates")
+      - ref("dim_statuses")
+      - ref("rolling_counter")
+      - ref("dim_lists")
+      - ref("fact_todos")
+      - ref("dim_folders")
+      - ref("dim_statuses")
+      - ref("dim_dates_lookahead")
+    owner: 
+      name: 'ken'
+

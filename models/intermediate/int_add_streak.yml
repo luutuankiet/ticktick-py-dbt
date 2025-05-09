@@ -1,0 +1,167 @@
+models:
+  - name: int_add_streak
+    tests:
+      - dbt_utils.expression_is_true:
+          name: "verify_valid_streak_assignment"
+          description: |
+            Why : streak count is a calculated fields which needs to be tested.
+            What : 
+            - Verify that for each non-null buckets, an equivalent non 0 streak is calcualted.
+            - If both bucket are NULL, the status MUST be 0 (new) hence streak is 0.
+          expression: |
+            (todo_done_habit_bucket_id IS NOT NULL AND todo_done_streak != 0)
+            OR
+            (todo_wontdo_habit_bucket_id IS NOT NULL AND todo_wontdo_streak != 0)
+            OR
+            ({{ isnull('todo_wontdo_habit_bucket_id') }} AND {{ isnull('todo_done_habit_bucket_id') }} AND todo_status = '0')
+      - dbt_utils.equal_rowcount:
+          name: "verify_same_rowcount_as_upstream"
+          description: this add streak do not add additional rows thus should have same row as upstream.
+          compare_model: ref('int_add_bucket')
+             
+    columns:
+      - name: todo_done_streak
+        meta:
+          metrics:
+            met_todo_done_streak:
+              type: average
+          dimension:
+            type: number
+        data_type: bigint
+      - name: todo_done_habit_bucket_id
+        meta:
+          dimension:
+            type: number
+        data_type: bigint
+      - name: todo_wontdo_habit_bucket_id
+        meta:
+          dimension:
+            type: number
+        data_type: bigint
+      - name: todo_id
+        meta:
+          dimension:
+            type: string
+        data_type: text
+        data_tests:
+          - unique
+      - name: todo_title
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_projectid
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_repeatflag
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_repeattaskid
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_status
+        meta:
+          dimension:
+            type: string
+        data_type: text
+      - name: todo_derived__is_repeat
+        meta:
+          dimension:
+            type: boolean
+        data_type: boolean
+      - name: todo_completedtime
+        meta:
+          dimension:
+            type: timestamp
+        data_type: timestamp without time zone
+      - name: todo_duedate
+        meta:
+          dimension:
+            type: timestamp
+        data_type: timestamp without time zone
+      - name: todo_done_max_streak
+        data_tests:
+          - constant:
+              name: verify_only_one_max_streak_per_todo
+              description: >-
+                this column gets the MAX value per todo thus should only contain
+                1 value per todo group
+              group_by_columns:
+                - todo_repeattaskid
+              config:
+                where: "todo_repeattaskid <> 'default' "
+        meta:
+          metrics:
+            met_todo_done_max_streak:
+              type: average
+          dimension:
+            type: number
+        data_type: bigint
+      - name: todo_done_total_attempts
+        description: rolled up by todo_id / repeattaskid to get the total attempts.
+        data_tests:
+          - dbt_utils.expression_is_true:
+              name: "verify_valid_total_attempts"
+              description: |
+                - Why: total attempts is a calculated field that depends on done_streak.
+                - What : because all todos in this model are recurring, total attempts should be > 0.
+              expression: "> 0"
+        meta:
+          metrics:
+            met_todo_done_total_attempts:
+              type: average
+          dimension:
+            type: number
+        data_type: bigint
+      - name: todo_wontdo_streak
+        data_type: bigint
+        meta:
+          metrics:
+            met_todo_wontdo_streak:
+              type: average
+          dimension:
+            type: number
+      - name: todo_wontdo_bad_habit_flag
+        description: |-
+          -  flags the habit if it is wont do consecutively over 1 time.
+          - only affects the latest bucket
+        data_type: text
+        data_tests:
+          - constant:
+              name: verify_one_flag_per_todo
+              description: >-
+                this flag is rolled up to each habit groups thus should only
+                have 1 flag per group.
+              group_by_columns:
+                - todo_repeattaskid
+              config:
+                where: "todo_repeattaskid <> 'default' "
+        meta:
+          dimension:
+            type: string
+      - name: todo_current_done_bucket
+        description: |-
+          - The latest (max) done bucket id of the habit
+          - Rolling counter up to the latest item
+        data_type: bigint
+      - name: todo_current_wontdo_bucket
+        description: |-
+          - The latest (max) wontdo bucket id of the habit
+          - Rolling counter up to the latest item
+        data_type: bigint
+      - name: todo_deleted
+        data_type: boolean
+        description: ""
+      - name: todo_habit_is_active
+        data_type: boolean
+        description: |
+          flag if the habit is currently active (i.e. can the user complete it)
+          cases
+          1. repeattaskId pointing to a deleted item
+          2. repeattaskId pointing to an item that has completed. 
