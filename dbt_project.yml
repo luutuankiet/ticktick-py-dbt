@@ -12,6 +12,7 @@ models:
   todo_analytics:
     intermediate:
       +materialized: view
+      +tags: "int"
     staging:
       +materialized: view
       +tags: "staging"
