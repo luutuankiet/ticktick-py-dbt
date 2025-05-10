@@ -1,0 +1,122 @@
+name: tmp rolling date
+description: showing relative done dates
+tableName: rolling_counter
+updatedAt: "2025-01-11T22:18:14.993Z"
+metricQuery:
+  exploreName: rolling_counter
+  dimensions:
+    - dim_statuses_status_desc
+    - rolling_counter_rolling_date_day
+    - dim_dates_day_name
+  metrics:
+    - rolling_counter_todo_id_count
+  filters:
+    dimensions:
+      id: 8414219c-3a9b-49e3-8856-836c7cb1a0e0
+      or:
+        - id: 65499d63-88a9-4253-82b0-8ca3e4a297b8
+          target:
+            fieldId: rolling_counter_rolling_date
+          values:
+            - 1
+          operator: inTheNext
+          required: false
+          settings:
+            completed: false
+            unitOfTime: days
+        - id: 5f3e9aef-d8b4-4fbe-8491-81804e5ca780
+          target:
+            fieldId: rolling_counter_rolling_date
+          values:
+            - 3
+          operator: inThePast
+          required: false
+          settings:
+            completed: false
+            unitOfTime: days
+  sorts:
+    - fieldId: dim_statuses_status_desc
+      descending: false
+  limit: 500
+  tableCalculations: []
+  additionalMetrics:
+    - name: todo_id_count
+      label: Count
+      description: "Count of Count of Todo id on the table Rolling counter "
+      uuid: 5e5b699e-f6e8-45c0-934c-59eaa1e994b8
+      sql: ${TABLE}.todo_id
+      table: rolling_counter
+      type: count
+      baseDimensionName: todo_id
+      formatOptions:
+        type: default
+        separator: default
+  customDimensions: []
+chartConfig:
+  type: cartesian
+  config:
+    layout:
+      xField: dim_dates_day_name
+      yField:
+        - rolling_counter_todo_id_count
+    eChartsConfig:
+      series:
+        - type: bar
+          label:
+            show: true
+            position: inside
+          stack: rolling_counter_todo_id_count
+          encode:
+            xRef:
+              field: dim_dates_day_name
+            yRef:
+              field: rolling_counter_todo_id_count
+              pivotValues:
+                - field: dim_statuses_status_desc
+                  value: done
+          stackLabel:
+            show: true
+          yAxisIndex: 0
+        - type: bar
+          label:
+            show: true
+            position: inside
+          stack: rolling_counter_todo_id_count
+          encode:
+            xRef:
+              field: dim_dates_day_name
+            yRef:
+              field: rolling_counter_todo_id_count
+              pivotValues:
+                - field: dim_statuses_status_desc
+                  value: undone
+          stackLabel:
+            show: true
+          yAxisIndex: 0
+        - type: bar
+          label:
+            show: true
+            position: inside
+          stack: rolling_counter_todo_id_count
+          encode:
+            xRef:
+              field: dim_dates_day_name
+            yRef:
+              field: rolling_counter_todo_id_count
+              pivotValues:
+                - field: dim_statuses_status_desc
+                  value: wont do
+          stackLabel:
+            show: true
+          yAxisIndex: 0
+dashboardSlug: gtd-dash-0-3
+slug: tmp-rolling-date-1736659094993
+tableConfig:
+  columnOrder:
+    - dim_statuses_status_desc
+    - rolling_counter_rolling_date_day
+    - dim_dates_day_name
+    - rolling_counter_todo_id_count
+spaceSlug: shared
+version: 1
+downloadedAt: "2025-05-10T00:50:19.787Z"

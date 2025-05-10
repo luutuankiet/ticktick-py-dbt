@@ -1,0 +1,210 @@
+name: bar - today count of tasks by all time inbox and modified today as next action
+description: null
+tableName: fact_todos
+updatedAt: "2024-07-14T15:49:43.762Z"
+metricQuery:
+  exploreName: fact_todos
+  dimensions:
+    - fact_todos_todo_derived__tag_semantic
+    - dim_statuses_status_desc
+    - semantic_category
+  metrics:
+    - fact_todos_clarified_cnt_today
+    - fact_todos_all_time_inbox
+    - fact_todos_done_cnt_today
+  filters:
+    dimensions:
+      id: 4b13c89d-be04-4882-b4ae-6f08cd9817b6
+      and:
+        - id: 3150e4aa-9c00-4408-b4e7-07dc5c877b8a
+          target:
+            fieldId: fact_todos_todo_derived__tag_semantic
+          values:
+            - inbox
+            - next action
+          operator: equals
+          required: false
+    tableCalculations:
+      id: 726d4311-f267-4f1c-ba06-f1fcb6371546
+      and:
+        - id: 96c38832-5ef3-4aa1-bdb8-686b52d751da
+          target:
+            fieldId: merged_count
+          values:
+            - "0"
+          operator: greaterThan
+  sorts:
+    - fieldId: semantic_category
+      descending: false
+  limit: 500
+  tableCalculations:
+    - name: dummy
+      displayName: dummy
+      sql: "' '"
+      format:
+        type: default
+        currency: USD
+        separator: default
+      type: string
+    - name: merged_count
+      displayName: merged count
+      sql: >-
+        case when ${fact_todos.todo_derived__tag_semantic} = 'next action' and
+        ${dim_statuses.status_desc} = 'undone' then
+        ${fact_todos.clarified_cnt_today}
+
+        when ${fact_todos.todo_derived__tag_semantic} = 'inbox' and
+        ${dim_statuses.status_desc} = 'undone' then ${fact_todos.all_time_inbox}
+
+        else ${fact_todos.done_cnt_today} end
+      format:
+        type: default
+        currency: USD
+        separator: default
+      type: number
+  additionalMetrics:
+    - name: status_desc_count_of_status_desc
+      label: Count of Status desc
+      description: "Count of Status desc on the table Dim statuses "
+      uuid: 1c37b243-0c1c-45eb-9af5-b1e9e0812f85
+      sql: ${TABLE}.status_desc
+      table: dim_statuses
+      type: count
+      baseDimensionName: status_desc
+      formatOptions:
+        type: default
+        separator: default
+  customDimensions:
+    - id: semantic_category
+      name: semantic category
+      type: sql
+      table: fact_todos
+      sql: >
+        case when ${fact_todos.todo_derived__tag_semantic} = 'inbox' and
+        ${dim_statuses.status_desc} = 'undone' then 'to clarify'
+
+        when ${fact_todos.todo_derived__tag_semantic} = 'next action' and 
+
+        ${dim_statuses.status_desc} = 'undone' then 'clarified'
+
+        when ${fact_todos.todo_derived__tag_semantic} in ('next action','inbox')
+        and ${dim_statuses.status_desc} in ('done') then 'done'
+
+        when ${fact_todos.todo_derived__tag_semantic} in ('next action','inbox')
+        and ${dim_statuses.status_desc} = 'wont do' then 'wont do' end
+      dimensionType: string
+chartConfig:
+  type: cartesian
+  config:
+    layout:
+      xField: dummy
+      yField:
+        - merged_count
+      flipAxes: true
+      showGridY: false
+    metadata:
+      merged_count.done:
+        color: "#3ba272"
+      merged_count.inbox:
+        color: "#c4c4c4"
+      merged_count.wont do:
+        color: "#337dff"
+      merged_count.to clarify:
+        color: "#cfcfcf"
+      merged_count.next action:
+        color: "#5470c6"
+    eChartsConfig:
+      grid:
+        top: 0%
+        left: 2%
+        right: 10%
+        bottom: 0%
+        containLabel: true
+      xAxis:
+        - name: clarification progress
+      legend:
+        show: true
+        type: plain
+        bottom: 0px
+      series:
+        - type: bar
+          label:
+            show: true
+            position: inside
+          stack: merged_count
+          encode:
+            xRef:
+              field: dummy
+            yRef:
+              field: merged_count
+              pivotValues:
+                - field: semantic_category
+                  value: clarified
+          stackLabel:
+            show: true
+          yAxisIndex: 0
+        - type: bar
+          color: "#337dff"
+          label:
+            show: true
+            position: inside
+          stack: merged_count
+          encode:
+            xRef:
+              field: dummy
+            yRef:
+              field: merged_count
+              pivotValues:
+                - field: semantic_category
+                  value: wont do
+          stackLabel:
+            show: true
+          yAxisIndex: 0
+        - type: bar
+          color: "#3ba272"
+          label:
+            show: true
+            position: inside
+          stack: merged_count
+          encode:
+            xRef:
+              field: dummy
+            yRef:
+              field: merged_count
+              pivotValues:
+                - field: semantic_category
+                  value: done
+          stackLabel:
+            show: true
+          yAxisIndex: 0
+        - type: bar
+          label:
+            show: true
+            position: inside
+          stack: merged_count
+          encode:
+            xRef:
+              field: dummy
+            yRef:
+              field: merged_count
+              pivotValues:
+                - field: semantic_category
+                  value: to clarify
+          stackLabel:
+            show: true
+          yAxisIndex: 0
+slug: bar-today-count-of-tasks-by-all-time-inbox-and-modified-today-as-next-action
+tableConfig:
+  columnOrder:
+    - fact_todos_todo_derived__tag_semantic
+    - dummy
+    - fact_todos_clarified_cnt_today
+    - fact_todos_all_time_inbox
+    - dim_statuses_status_desc
+    - fact_todos_done_cnt_today
+    - merged_count
+    - semantic_category
+    - semantic category
+spaceSlug: shared
+version: 1
+downloadedAt: "2025-05-10T00:50:19.787Z"

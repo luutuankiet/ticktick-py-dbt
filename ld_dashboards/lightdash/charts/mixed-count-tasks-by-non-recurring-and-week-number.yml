@@ -1,0 +1,525 @@
+name: mixed - count tasks by non recurring and week number
+description: null
+tableName: fact_todos
+updatedAt: "2025-04-25T04:41:18.901Z"
+metricQuery:
+  exploreName: fact_todos
+  dimensions:
+    - dim_dates_lookahead_date_id_month
+    - dim_dates_lookahead_date_id_day
+    - dim_dates_lookahead_week_of_year
+    - dim_dates_lookahead_day_name
+  metrics:
+    - fact_todos_lookahead_norepeat_count
+    - fact_todos_lookahead_repeat_count
+  filters:
+    dimensions:
+      id: 81e26b31-afc1-4cd0-9011-e5f4def7eafa
+      and:
+        - id: 1088bfbb-aa9e-4af5-a120-c870965386cb
+          target:
+            fieldId: dim_dates_lookahead_date_id_year
+          values:
+            - "1900"
+          operator: notEquals
+          required: false
+        - id: faf4432b-1182-4653-bc57-db2824c116bb
+          target:
+            fieldId: dim_dates_lookahead_date_id
+          values:
+            - "1900-01-01"
+          operator: notEquals
+          required: false
+        - id: 1d4993ab-f78e-42f1-96b6-971558d7126c
+          or:
+            - id: 322f1286-f819-4c47-a99d-fbd0ac16c659
+              target:
+                fieldId: dim_dates_lookahead_date_id_week
+              values:
+                - 1
+              operator: inTheCurrent
+              required: false
+              settings:
+                completed: false
+                unitOfTime: weeks
+            - id: 68746a7c-2a2e-458b-811a-c7b2cfde20a8
+              target:
+                fieldId: dim_dates_lookahead_date_id_week
+              values:
+                - 8
+              operator: inTheNext
+              required: false
+              settings:
+                completed: false
+                unitOfTime: weeks
+        - id: e57a3ecb-2652-487a-9f31-291374190b29
+          target:
+            fieldId: fact_todos_todo_derived__tags
+          values:
+            - habit
+          operator: doesNotInclude
+          required: false
+  sorts:
+    - fieldId: dim_dates_lookahead_date_id_day
+      descending: false
+  limit: 500
+  metricOverrides: {}
+  tableCalculations:
+    - name: weekly_avg_1
+      displayName: weekly avg
+      sql: >-
+        avg(${fact_todos.lookahead_norepeat_count} +
+        ${fact_todos.lookahead_repeat_count}) over(partition by
+        ${dim_dates_lookahead.week_of_year})
+      format:
+        type: number
+        round: 1
+        currency: USD
+        separator: default
+      type: number
+    - name: sum
+      displayName: sum
+      sql: >-
+        ${fact_todos.lookahead_norepeat_count} +
+        ${fact_todos.lookahead_repeat_count}
+      format:
+        type: default
+        currency: USD
+        separator: default
+      type: number
+    - name: helper_count_1
+      displayName: helper_count
+      sql: >-
+        count(
+
+
+        case when ${fact_todos.lookahead_norepeat_count} +
+        ${fact_todos.lookahead_repeat_count} != 0 
+
+
+        then ${dim_dates_lookahead.date_id_day}
+
+
+        else NULL end
+
+
+        ) over (partition by ${dim_dates_lookahead.week_of_year})
+      format:
+        type: default
+        currency: USD
+        separator: default
+      type: number
+  additionalMetrics:
+    - name: list_name_count_of_list_name
+      label: Count of List name
+      description: "Count of List name on the table Dim lists "
+      uuid: 5fc99dba-417b-496d-915c-1faf6267e7d7
+      sql: ${TABLE}.list_name
+      table: dim_lists
+      type: count
+      baseDimensionName: list_name
+      formatOptions:
+        type: default
+        separator: default
+    - name: list_name_count_distinct_of_list_name
+      label: Count distinct of List name
+      description: "Count distinct of List name on the table Dim lists "
+      uuid: 9c9af06d-758c-41b5-91c5-e3c701abb353
+      sql: ${TABLE}.list_name
+      table: dim_lists
+      type: count_distinct
+      baseDimensionName: list_name
+      formatOptions:
+        type: default
+        separator: default
+  customDimensions: []
+chartConfig:
+  type: cartesian
+  config:
+    layout:
+      xField: dim_dates_lookahead_date_id_day
+      yField:
+        - sum
+        - weekly_avg_1
+        - helper_count_1
+        - dim_dates_lookahead_day_name
+      flipAxes: false
+      showGridX: false
+      showGridY: true
+    metadata:
+      sum.45:
+        color: "#33ffe6"
+      helper_count.45:
+        color: "#33ffe6"
+    eChartsConfig:
+      xAxis:
+        - name: day
+          inverse: false
+          maxOffset: "5"
+          minOffset: "5"
+        - {}
+      yAxis:
+        - max: "6"
+          name: ""
+        - max: "4"
+          min: "0"
+          name: ""
+      legend:
+        show: false
+        orient: horizontal
+      series:
+        - type: line
+          label:
+            show: false
+          stack: weekly_avg_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: weekly_avg_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 17
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: false
+          stack: weekly_avg_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: weekly_avg_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 18
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: false
+          stack: weekly_avg_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: weekly_avg_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 19
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: false
+          stack: weekly_avg_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: weekly_avg_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 20
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: false
+          stack: weekly_avg_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: weekly_avg_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 22
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: false
+          stack: weekly_avg_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: weekly_avg_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 21
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: false
+          stack: weekly_avg_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: weekly_avg_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 24
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: true
+            position: top
+          stack: sum
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: sum
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 17
+          smooth: true
+          areaStyle: {}
+          showSymbol: true
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: true
+            position: top
+          stack: sum
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: sum
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 18
+          smooth: false
+          areaStyle: {}
+          showSymbol: true
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: true
+            position: top
+          stack: sum
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: sum
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 19
+          smooth: false
+          areaStyle: {}
+          showSymbol: true
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: true
+            position: top
+          stack: sum
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: sum
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 20
+          smooth: false
+          areaStyle: {}
+          showSymbol: true
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: true
+            position: top
+          stack: sum
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: sum
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 22
+          smooth: false
+          areaStyle: {}
+          showSymbol: true
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: true
+            position: top
+          stack: sum
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: sum
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 21
+          smooth: false
+          areaStyle: {}
+          showSymbol: true
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: true
+            position: top
+          stack: sum
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: sum
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 24
+          smooth: false
+          areaStyle: {}
+          showSymbol: true
+          yAxisIndex: 0
+        - type: line
+          label:
+            show: false
+          stack: helper_count_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: helper_count_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 17
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 1
+        - type: line
+          label:
+            show: false
+          stack: helper_count_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: helper_count_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 18
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 1
+        - type: line
+          label:
+            show: false
+          stack: helper_count_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: helper_count_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 19
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 1
+        - type: line
+          label:
+            show: false
+          stack: helper_count_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: helper_count_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 20
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 1
+        - type: line
+          label:
+            show: false
+          stack: helper_count_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: helper_count_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 22
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 1
+        - type: line
+          label:
+            show: false
+          stack: helper_count_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: helper_count_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 21
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 1
+        - type: line
+          label:
+            show: false
+          stack: helper_count_1
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: helper_count_1
+              pivotValues:
+                - field: dim_dates_lookahead_week_of_year
+                  value: 24
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 1
+        - type: line
+          label:
+            show: false
+          encode:
+            xRef:
+              field: dim_dates_lookahead_date_id_day
+            yRef:
+              field: dim_dates_lookahead_day_name
+          smooth: false
+          showSymbol: false
+          yAxisIndex: 0
+slug: mixed-count-tasks-by-non-recurring-and-week-number
+tableConfig:
+  columnOrder:
+    - dim_dates_lookahead_date_id_month
+    - dim_dates_lookahead_date_id_day
+    - dim_dates_lookahead_week_of_year
+    - dim_dates_lookahead_day_name
+    - weekly_avg_1
+    - fact_todos_lookahead_norepeat_count
+    - fact_todos_lookahead_repeat_count
+    - sum
+    - helper_count_1
+spaceSlug: shared
+version: 1
+downloadedAt: "2025-05-10T00:50:19.787Z"

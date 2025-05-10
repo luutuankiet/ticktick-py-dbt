@@ -1,0 +1,137 @@
+name: recurring habits (time sensitive)
+description: null
+tableName: fact_todos
+updatedAt: "2024-07-23T18:24:39.253Z"
+metricQuery:
+  exploreName: fact_todos
+  dimensions:
+    - fact_todos_todo_title
+    - dim_lists_list_name
+    - fact_todos_todo_modifiedtime_raw
+    - dim_statuses_status_desc
+    - dim_lists_list_id
+    - fact_todos_todo_id
+    - fact_todos_todo_duedate_humanize
+    - fact_todos_todo_duedate_raw
+  metrics: []
+  filters:
+    dimensions:
+      id: 12bed21a-c32d-4d49-9c49-f5ad8d41545c
+      and:
+        - id: fc89c74a-3cda-4f9c-a43a-11ab5e9b3b2f
+          or:
+            - id: 68d904e4-8fb0-48dd-91a4-525e4221e549
+              target:
+                fieldId: due_date_date_id_day
+              values:
+                - 0
+              operator: inTheNext
+              required: false
+              settings:
+                completed: false
+                unitOfTime: days
+        - id: 4a7a4a4a-6304-4739-ba80-c46c50fb850b
+          target:
+            fieldId: fact_todos_lookahead_flag
+          values:
+            - true
+          operator: equals
+          required: false
+        - id: c4c0b744-95db-43ae-b802-24e2609da787
+          target:
+            fieldId: dim_statuses_status_desc
+          values:
+            - undone
+          operator: equals
+          required: false
+        - id: 9312424e-9a68-4041-8220-5a74567e8db8
+          target:
+            fieldId: fact_todos_todo_derived__is_repeat
+          values:
+            - true
+          operator: equals
+          required: false
+        - id: 88cdce1e-3500-46b8-bc8a-2ad9572a49fb
+          target:
+            fieldId: fact_todos_todo_is_time_sensitive
+          values:
+            - true
+          operator: equals
+          required: false
+    tableCalculations:
+      id: 2f9ebf4c-4ab3-4781-af76-2ceabb26c5a2
+      and:
+        - id: 55d49b70-d006-42fc-9bfd-f32d34718512
+          target:
+            fieldId: rn
+          values:
+            - "1"
+          operator: notNull
+  sorts:
+    - fieldId: rn
+      descending: false
+  limit: 500
+  tableCalculations:
+    - name: rn
+      displayName: rn
+      sql: row_number() over (order by ${fact_todos.todo_duedate_raw} asc)
+      format:
+        type: default
+        currency: USD
+        separator: default
+      type: number
+  additionalMetrics:
+    - name: status_desc_count_of_status_desc
+      label: Count of Status desc
+      description: "Count of Status desc on the table Dim statuses "
+      uuid: 9bebd395-aed0-46a6-8b17-0996e5b34cab
+      sql: ${TABLE}.status_desc
+      table: dim_statuses
+      type: count
+      baseDimensionName: status_desc
+      formatOptions:
+        type: default
+        separator: default
+  customDimensions: []
+chartConfig:
+  type: table
+  config:
+    columns:
+      rn:
+        visible: false
+      dim_lists_list_id:
+        visible: false
+      fact_todos_todo_id:
+        visible: false
+      dim_lists_list_name:
+        visible: false
+      fact_todos_todo_title:
+        name: todo
+      dim_statuses_status_desc:
+        name: status
+        visible: false
+      fact_todos_todo_modifiedtime_raw:
+        visible: false
+    metricsAsRows: false
+    showSubtotals: false
+    hideRowNumbers: true
+    showTableNames: false
+    showResultsTotal: false
+    showRowCalculation: false
+    showColumnCalculation: false
+    conditionalFormattings: []
+slug: recurring-habits-time-sensitive
+tableConfig:
+  columnOrder:
+    - fact_todos_todo_title
+    - dim_lists_list_name
+    - fact_todos_todo_modifiedtime_raw
+    - dim_statuses_status_desc
+    - dim_lists_list_id
+    - fact_todos_todo_id
+    - fact_todos_todo_duedate_humanize
+    - fact_todos_todo_duedate_raw
+    - rn
+spaceSlug: shared
+version: 1
+downloadedAt: "2025-05-10T00:50:19.787Z"
