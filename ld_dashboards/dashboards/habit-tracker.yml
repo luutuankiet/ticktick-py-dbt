@@ -1,0 +1,124 @@
+name: habit tracker
+description: ""
+updatedAt: "2025-05-09T17:27:43.983Z"
+tiles:
+  - x: 0
+    "y": 39
+    h: 11
+    w: 36
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: your upcoming habits
+      hideTitle: false
+      chartSlug: recurring-habits-time-sensitive
+  - x: 0
+    "y": 1
+    h: 20
+    w: 36
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: time-sensitive habits
+      hideTitle: false
+      chartSlug: habit-main
+  - x: 0
+    "y": 21
+    h: 18
+    w: 36
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: other recurring streaks
+      hideTitle: false
+      chartSlug: habit-main
+  - x: 0
+    "y": 0
+    h: 1
+    w: 10
+    tabUuid: null
+    type: markdown
+    properties:
+      title: "what went well ? "
+      hideTitle: false
+      content: ""
+filters:
+  metrics: []
+  dimensions:
+    - id: 0955b92a-cd90-4fa6-a613-0d9570748e79
+      target:
+        fieldId: fact_todos_habit_date
+        fieldName: habit_date
+        tableName: fact_todos
+      values:
+        - 4
+      disabled: false
+      operator: inThePast
+      settings:
+        completed: false
+        unitOfTime: weeks
+      tileTargets:
+        15a8384f-16de-4ac9-9fe6-1ca3a6a73441:
+          fieldId: fact_todos_habit_date
+          tableName: fact_todos
+        620468c1-91e3-4352-a7d3-cb1bd199e76c: false
+        f7e0b5c6-97d3-431d-9832-288e02c5b170:
+          fieldId: fact_todos_habit_date
+          tableName: fact_todos
+    - id: 49c4a3ec-55ab-4112-8ab9-8f3917583822
+      target:
+        fieldId: fact_todos_todo_habit_is_active
+        fieldName: todo_habit_is_active
+        tableName: fact_todos
+      values:
+        - true
+      disabled: false
+      operator: equals
+      tileTargets:
+        15a8384f-16de-4ac9-9fe6-1ca3a6a73441:
+          fieldId: fact_todos_todo_habit_is_active
+          tableName: fact_todos
+        620468c1-91e3-4352-a7d3-cb1bd199e76c:
+          fieldId: fact_todos_todo_habit_is_active
+          tableName: fact_todos
+        f7e0b5c6-97d3-431d-9832-288e02c5b170:
+          fieldId: fact_todos_todo_habit_is_active
+          tableName: fact_todos
+    - id: 34521c5e-82c3-493f-84cf-aa7de621a2fb
+      label: time sensitive
+      target:
+        fieldId: fact_todos_todo_is_time_sensitive
+        fieldName: todo_is_time_sensitive
+        tableName: fact_todos
+      values:
+        - true
+      disabled: false
+      operator: equals
+      tileTargets:
+        15a8384f-16de-4ac9-9fe6-1ca3a6a73441: false
+        620468c1-91e3-4352-a7d3-cb1bd199e76c: false
+        f7e0b5c6-97d3-431d-9832-288e02c5b170:
+          fieldId: fact_todos_todo_is_time_sensitive
+          tableName: fact_todos
+    - id: 86be1f8b-3dcf-4b26-a6a2-a981faa8160f
+      label: other recurring
+      target:
+        fieldId: fact_todos_todo_is_time_sensitive
+        fieldName: todo_is_time_sensitive
+        tableName: fact_todos
+      values:
+        - false
+      disabled: false
+      operator: equals
+      tileTargets:
+        15a8384f-16de-4ac9-9fe6-1ca3a6a73441:
+          fieldId: fact_todos_todo_is_time_sensitive
+          tableName: fact_todos
+        620468c1-91e3-4352-a7d3-cb1bd199e76c: false
+        f7e0b5c6-97d3-431d-9832-288e02c5b170: false
+  tableCalculations: []
+tabs: []
+slug: habit-tracker
+spaceSlug: shared
+version: 1
+downloadedAt: "2025-05-10T00:53:14.047Z"

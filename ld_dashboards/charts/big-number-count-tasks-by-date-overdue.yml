@@ -1,0 +1,61 @@
+name: big number - count tasks by date overdue
+description: null
+tableName: fact_todos
+updatedAt: "2024-07-17T20:40:14.786Z"
+metricQuery:
+  exploreName: fact_todos
+  dimensions: []
+  metrics:
+    - fact_todos_open_loops_count
+    - fact_todos_clarifytoday_count
+    - fact_todos_overdue_count_today
+  filters: {}
+  sorts:
+    - fieldId: fact_todos_open_loops_count
+      descending: true
+  limit: 500
+  tableCalculations:
+    - name: total
+      displayName: total
+      sql: >-
+        ${fact_todos.overdue_count_today}::text || '-' ||
+        ${fact_todos.clarifytoday_count}::text || '-' || 
+        ${fact_todos.open_loops_count}::text
+      format:
+        type: default
+        currency: USD
+        separator: default
+      type: string
+  additionalMetrics:
+    - name: status_desc_count_of_status_desc
+      label: Count of Status desc
+      description: "Count of Status desc on the table Dim statuses "
+      uuid: 1cb5e6eb-5695-4b54-a104-5f83d18fc7f1
+      sql: ${TABLE}.status_desc
+      table: dim_statuses
+      type: count
+      baseDimensionName: status_desc
+      formatOptions:
+        type: default
+        separator: default
+  customDimensions: []
+chartConfig:
+  type: big_number
+  config:
+    label: overdue/clarifytoday/loops
+    flipColors: true
+    selectedField: total
+    showComparison: false
+    comparisonLabel: vs yesterday
+    comparisonFormat: percentage
+    showBigNumberLabel: true
+slug: big-number-count-tasks-by-date-overdue
+tableConfig:
+  columnOrder:
+    - fact_todos_open_loops_count
+    - fact_todos_clarifytoday_count
+    - fact_todos_overdue_count_today
+    - total
+spaceSlug: shared
+version: 1
+downloadedAt: "2025-05-10T00:53:13.277Z"

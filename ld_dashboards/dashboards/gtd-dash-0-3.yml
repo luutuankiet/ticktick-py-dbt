@@ -1,0 +1,315 @@
+name: GTD dash 0.4
+description: ""
+updatedAt: "2025-05-09T17:24:39.127Z"
+tiles:
+  - x: 0
+    "y": 35
+    h: 2
+    w: 18
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: ""
+      hideTitle: true
+      chartSlug: count-of-tasks-by-status-today
+  - x: 15
+    "y": 0
+    h: 9
+    w: 15
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: unique BAU
+      hideTitle: false
+      chartSlug: mixed-count-tasks-by-non-recurring-and-week-number
+  - x: 0
+    "y": 63
+    h: 10
+    w: 18
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: ""
+      hideTitle: false
+      chartSlug: tmp-rolling-slice-by-month
+  - x: 12
+    "y": 37
+    h: 2
+    w: 6
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: ""
+      hideTitle: true
+      chartSlug: big-number-all-time-count-by-active-list-with-clarifyme
+  - x: 12
+    "y": 33
+    h: 2
+    w: 6
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: ""
+      hideTitle: true
+      chartSlug: big-number-count-tasks-by-date-overdue
+  - x: 0
+    "y": 53
+    h: 10
+    w: 18
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: ""
+      hideTitle: false
+      chartSlug: tmp-rolling-date-1736659094993
+  - x: 0
+    "y": 0
+    h: 9
+    w: 15
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: unique non BAU
+      hideTitle: false
+      chartSlug: mixed-count-tasks-by-non-recurring-and-week-number
+  - x: 11
+    "y": 43
+    h: 2
+    w: 7
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: ""
+      hideTitle: true
+      chartSlug: today-count-of-list
+  - x: 11
+    "y": 45
+    h: 2
+    w: 7
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: bau
+      hideTitle: true
+      chartSlug: copy-of-today-count-of-list-1728086866743
+  - x: 0
+    "y": 17
+    h: 12
+    w: 15
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: ""
+      hideTitle: false
+      chartSlug: what-have-you-done-1736659094992
+  - x: 0
+    "y": 73
+    h: 2
+    w: 18
+    tabUuid: null
+    type: markdown
+    properties:
+      title: ""
+      hideTitle: false
+      content: |-
+        # your weeky numbers
+        -----------
+  - x: 0
+    "y": 29
+    h: 2
+    w: 18
+    tabUuid: null
+    type: markdown
+    properties:
+      title: "fact : your raw numbers"
+      hideTitle: false
+      content: |+
+
+
+        -----------
+
+  - x: 0
+    "y": 31
+    h: 2
+    w: 18
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: ""
+      hideTitle: true
+      chartSlug: >-
+        bar-today-count-of-tasks-by-all-time-inbox-and-modified-today-as-next-action
+  - x: 0
+    "y": 39
+    h: 4
+    w: 18
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: bau
+      hideTitle: true
+      chartSlug: copy-of-count-of-tasks-by-status-today-1728086854360
+  - x: 15
+    "y": 9
+    h: 8
+    w: 15
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: BAU recurr
+      hideTitle: false
+      chartSlug: habit-main
+  - x: 0
+    "y": 47
+    h: 6
+    w: 16
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: ""
+      hideTitle: false
+      chartSlug: last-modified-tasks
+  - x: 0
+    "y": 9
+    h: 8
+    w: 15
+    tabUuid: null
+    type: saved_chart
+    properties:
+      title: habits
+      hideTitle: false
+      chartSlug: copy-of-habit-main-1746836482635
+filters:
+  metrics: []
+  dimensions:
+    - id: 400b3c6c-0728-415c-9172-2131280778e9
+      label: _non BAU
+      target:
+        fieldId: dim_folders_folder_name
+        fieldName: folder_name
+        tableName: dim_folders
+      values:
+        - 🎯lvl2 - Joons
+      disabled: false
+      operator: notEquals
+      tileTargets:
+        0f65a35f-f8c6-4d32-ad2b-17cccb2e5fb5: false
+        1c819bd7-5494-4bac-88be-83456d0e23ce: false
+        323932d8-9415-4503-b55d-aedf79b7494b: false
+        709274f9-7a7d-4c5c-9004-d186521b5e64: false
+        74e8f712-ae87-4297-b39c-749500996835: false
+        966eb47b-fad5-47d8-b671-b05e36f4986b: false
+        a1f3f6f4-e03f-4136-a700-f29e3bc9b253: false
+        c4720025-f800-4b5d-b85e-9d407d00e16e: false
+        dfafbc94-9598-4db0-8f09-fcf5b79b9abb: false
+    - id: 19936c2a-180b-4d21-ac05-88a14935731f
+      label: _BAU
+      target:
+        fieldId: dim_folders_folder_name
+        fieldName: folder_name
+        tableName: dim_folders
+      values:
+        - 🎯lvl2 - Joons
+        - default
+      disabled: false
+      operator: equals
+      tileTargets:
+        080e6e8e-27ae-4449-81a0-1d7a795f23b8: false
+        1c819bd7-5494-4bac-88be-83456d0e23ce: false
+        323932d8-9415-4503-b55d-aedf79b7494b: false
+        3bbd30b8-bb66-422b-816a-431ddb9a094f: false
+        6058073b-e6b6-4259-aed1-6d5dfaf10a1e: false
+        709274f9-7a7d-4c5c-9004-d186521b5e64:
+          fieldId: dim_folders_folder_name
+          tableName: dim_folders
+        74e8f712-ae87-4297-b39c-749500996835: false
+        966eb47b-fad5-47d8-b671-b05e36f4986b: false
+        a1f3f6f4-e03f-4136-a700-f29e3bc9b253:
+          fieldId: dim_folders_folder_name
+          tableName: dim_folders
+        c4720025-f800-4b5d-b85e-9d407d00e16e:
+          fieldId: dim_folders_folder_name
+          tableName: dim_folders
+        dfafbc94-9598-4db0-8f09-fcf5b79b9abb: false
+        e4313ba7-1711-43c7-86f6-9739bb6f666f: false
+    - id: d6695f68-ebcf-46aa-9d72-7b767c07ffd5
+      label: what have you done?
+      target:
+        fieldId: fact_todos_todo_is_time_sensitive
+        fieldName: todo_is_time_sensitive
+        tableName: fact_todos
+      values:
+        - false
+      disabled: false
+      operator: equals
+      tileTargets:
+        080e6e8e-27ae-4449-81a0-1d7a795f23b8: false
+        0f65a35f-f8c6-4d32-ad2b-17cccb2e5fb5: false
+        1c819bd7-5494-4bac-88be-83456d0e23ce: false
+        323932d8-9415-4503-b55d-aedf79b7494b: false
+        3bbd30b8-bb66-422b-816a-431ddb9a094f: false
+        6058073b-e6b6-4259-aed1-6d5dfaf10a1e: false
+        709274f9-7a7d-4c5c-9004-d186521b5e64: false
+        966eb47b-fad5-47d8-b671-b05e36f4986b: false
+        a1f3f6f4-e03f-4136-a700-f29e3bc9b253: false
+        c4720025-f800-4b5d-b85e-9d407d00e16e: false
+        dfafbc94-9598-4db0-8f09-fcf5b79b9abb: false
+        e4313ba7-1711-43c7-86f6-9739bb6f666f: false
+    - id: cd1521c9-0131-443c-8aea-af03ce2e5fa2
+      label: _habit_date
+      target:
+        fieldId: fact_todos_habit_date
+        fieldName: habit_date
+        tableName: fact_todos
+      values:
+        - 0
+      disabled: false
+      operator: inThePast
+      settings:
+        completed: false
+        unitOfTime: days
+      tileTargets:
+        080e6e8e-27ae-4449-81a0-1d7a795f23b8: false
+        0f65a35f-f8c6-4d32-ad2b-17cccb2e5fb5: false
+        1c819bd7-5494-4bac-88be-83456d0e23ce: false
+        323932d8-9415-4503-b55d-aedf79b7494b: false
+        3bbd30b8-bb66-422b-816a-431ddb9a094f: false
+        6058073b-e6b6-4259-aed1-6d5dfaf10a1e: false
+        709274f9-7a7d-4c5c-9004-d186521b5e64: false
+        74e8f712-ae87-4297-b39c-749500996835: false
+        966eb47b-fad5-47d8-b671-b05e36f4986b: false
+        a1f3f6f4-e03f-4136-a700-f29e3bc9b253: false
+        dfafbc94-9598-4db0-8f09-fcf5b79b9abb: false
+    - id: f1f6884f-30cd-4849-b559-21e02da286af
+      label: _BAU date
+      target:
+        fieldId: dim_dates_lookahead_day_name
+        fieldName: day_name
+        tableName: dim_dates_lookahead
+      values:
+        - Saturday
+        - Sunday
+      disabled: false
+      operator: notEquals
+      tileTargets:
+        080e6e8e-27ae-4449-81a0-1d7a795f23b8: false
+        0f65a35f-f8c6-4d32-ad2b-17cccb2e5fb5:
+          fieldId: dim_dates_lookahead_day_name
+          tableName: dim_dates_lookahead
+        1c819bd7-5494-4bac-88be-83456d0e23ce: false
+        323932d8-9415-4503-b55d-aedf79b7494b: false
+        3bbd30b8-bb66-422b-816a-431ddb9a094f: false
+        6058073b-e6b6-4259-aed1-6d5dfaf10a1e: false
+        709274f9-7a7d-4c5c-9004-d186521b5e64: false
+        74e8f712-ae87-4297-b39c-749500996835: false
+        966eb47b-fad5-47d8-b671-b05e36f4986b: false
+        a1f3f6f4-e03f-4136-a700-f29e3bc9b253: false
+        c4720025-f800-4b5d-b85e-9d407d00e16e: false
+        dfafbc94-9598-4db0-8f09-fcf5b79b9abb: false
+        e4313ba7-1711-43c7-86f6-9739bb6f666f: false
+  tableCalculations: []
+tabs: []
+slug: gtd-dash-0-3
+spaceSlug: shared
+version: 1
+downloadedAt: "2025-05-10T00:53:14.047Z"

@@ -1,0 +1,270 @@
+name: count of tasks by status today
+description: null
+tableName: fact_todos
+updatedAt: "2024-08-26T16:14:01.922Z"
+metricQuery:
+  exploreName: fact_todos
+  dimensions:
+    - dim_statuses_status_desc
+    - due_date_date_id_day
+    - fact_todos_todo_derived__unplanned
+    - repeat_semantic
+    - fact_todos_todo_derived__repeat_semantic
+  metrics:
+    - dim_statuses_status_desc_count_of_status_desc
+  filters:
+    metrics:
+      id: b6bd1bba-00a6-43b4-ba4e-3f04e7933b69
+      and:
+        - id: 85a85c18-a7fb-4d6e-b6ee-562f8716e289
+          target:
+            fieldId: dim_statuses_status_desc_count_of_status_desc
+          values:
+            - "0"
+          operator: greaterThan
+    dimensions:
+      id: f0e82468-2f64-411e-a84f-c0a547a073ab
+      and:
+        - id: c1f6320c-2d2f-4798-b78d-309f67a0dc8c
+          target:
+            fieldId: due_date_date_id_day
+          values:
+            - 0
+          operator: inTheNext
+          required: false
+          settings:
+            completed: false
+            unitOfTime: days
+        - id: c8cf3ef3-09a5-46b7-8945-3a28ceb7e426
+          target:
+            fieldId: dim_lists_list_name
+          values:
+            - default
+          operator: notEquals
+          required: false
+  sorts:
+    - fieldId: due_date_date_id_day
+      descending: true
+  limit: 500
+  tableCalculations:
+    - name: dumm
+      displayName: dumm
+      sql: "' '"
+      format:
+        type: default
+        currency: USD
+        separator: default
+      type: string
+  additionalMetrics:
+    - name: status_desc_count_of_status_desc
+      label: Count of Status desc
+      description: "Count of Status desc on the table Dim statuses "
+      uuid: 95131f61-bfaa-4cc4-a022-3833ba2cc1a0
+      sql: ${TABLE}.status_desc
+      table: dim_statuses
+      type: count
+      baseDimensionName: status_desc
+      formatOptions:
+        type: default
+        separator: default
+  customDimensions:
+    - id: repeat_semantic
+      name: repeat_semantic
+      type: sql
+      table: fact_todos
+      sql: >-
+        case when ${fact_todos.todo_derived__is_repeat} is true then 'repeat'
+        else '' end
+      dimensionType: string
+chartConfig:
+  type: cartesian
+  config:
+    layout:
+      xField: dumm
+      yField:
+        - dim_statuses_status_desc_count_of_status_desc
+      flipAxes: true
+      showGridY: false
+    metadata:
+      dim_statuses_status_desc_count_of_status_desc.done:
+        color: "#5470c6"
+      dim_statuses_status_desc_count_of_status_desc.undone:
+        color: "#c4c4c4"
+      dim_statuses_status_desc_count_of_status_desc.wont do:
+        color: "#73c0de"
+      dim_statuses_status_desc_count_of_status_desc_n2.undone.null:
+        color: "#b8b0ad"
+      dim_statuses_status_desc_count_of_status_desc_n2.done.planned:
+        color: "#5470c6"
+      dim_statuses_status_desc_count_of_status_desc_n3.done.planned.:
+        color: "#5470c6"
+      dim_statuses_status_desc_count_of_status_desc_n3.null.planned.:
+        color: "#fc8452"
+      dim_statuses_status_desc_count_of_status_desc_n2.done.unplanned:
+        color: "#a3abc7"
+      dim_statuses_status_desc_count_of_status_desc_n2.undone.planned:
+        color: "#757575"
+      dim_statuses_status_desc_count_of_status_desc_n2.wont do.planned:
+        color: "#92b382"
+      dim_statuses_status_desc_count_of_status_desc_n3.done.unplanned.:
+        color: "#9eb2f0"
+      dim_statuses_status_desc_count_of_status_desc_n3.undone.planned.:
+        color: "#474747"
+      dim_statuses_status_desc_count_of_status_desc_n2.undone.unplanned:
+        color: "#adadad"
+      dim_statuses_status_desc_count_of_status_desc_n3.wont do.planned.:
+        color: "#1c8050"
+      dim_statuses_status_desc_count_of_status_desc_n2.wont do.unplanned:
+        color: "#a2ad9e"
+      dim_statuses_status_desc_count_of_status_desc_n3.undone.unplanned.:
+        color: "#a3a3a3"
+      dim_statuses_status_desc_count_of_status_desc_n3.wont do.unplanned.:
+        color: "#43a87a"
+      dim_statuses_status_desc_count_of_status_desc_n3.done.planned.repeat:
+        color: "#5470c6"
+      dim_statuses_status_desc_count_of_status_desc_n3.undone.planned.repeat:
+        color: "#474747"
+      dim_statuses_status_desc_count_of_status_desc_n3.wont do.planned.repeat:
+        color: "#1c8050"
+    eChartsConfig:
+      grid:
+        top: 0px
+        left: 2%
+        right: 2%
+        bottom: 0%
+        containLabel: true
+      xAxis:
+        - name: to do
+      yAxis:
+        - {}
+        - {}
+      legend:
+        show: true
+        type: scroll
+        bottom: 0px
+        orient: horizontal
+      series:
+        - type: bar
+          label:
+            show: true
+            position: inside
+          stack: dim_statuses_status_desc_count_of_status_desc
+          encode:
+            xRef:
+              field: dumm
+            yRef:
+              field: dim_statuses_status_desc_count_of_status_desc
+              pivotValues:
+                - field: dim_statuses_status_desc
+                  value: done
+                - field: fact_todos_todo_derived__unplanned
+                  value: planned
+                - field: fact_todos_todo_derived__repeat_semantic
+                  value: ""
+          yAxisIndex: 0
+        - type: bar
+          label:
+            show: true
+            position: inside
+          stack: dim_statuses_status_desc_count_of_status_desc
+          encode:
+            xRef:
+              field: dumm
+            yRef:
+              field: dim_statuses_status_desc_count_of_status_desc
+              pivotValues:
+                - field: dim_statuses_status_desc
+                  value: done
+                - field: fact_todos_todo_derived__unplanned
+                  value: planned
+                - field: fact_todos_todo_derived__repeat_semantic
+                  value: repeat
+          yAxisIndex: 0
+        - type: bar
+          label:
+            show: true
+            position: inside
+          stack: dim_statuses_status_desc_count_of_status_desc
+          encode:
+            xRef:
+              field: dumm
+            yRef:
+              field: dim_statuses_status_desc_count_of_status_desc
+              pivotValues:
+                - field: dim_statuses_status_desc
+                  value: wont do
+                - field: fact_todos_todo_derived__unplanned
+                  value: planned
+                - field: fact_todos_todo_derived__repeat_semantic
+                  value: ""
+          yAxisIndex: 0
+        - type: bar
+          label:
+            show: true
+            position: inside
+          stack: dim_statuses_status_desc_count_of_status_desc
+          encode:
+            xRef:
+              field: dumm
+            yRef:
+              field: dim_statuses_status_desc_count_of_status_desc
+              pivotValues:
+                - field: dim_statuses_status_desc
+                  value: undone
+                - field: fact_todos_todo_derived__unplanned
+                  value: planned
+                - field: fact_todos_todo_derived__repeat_semantic
+                  value: repeat
+          stackLabel:
+            show: true
+          yAxisIndex: 0
+        - type: bar
+          label:
+            show: true
+            position: inside
+          stack: dim_statuses_status_desc_count_of_status_desc
+          encode:
+            xRef:
+              field: dumm
+            yRef:
+              field: dim_statuses_status_desc_count_of_status_desc
+              pivotValues:
+                - field: dim_statuses_status_desc
+                  value: undone
+                - field: fact_todos_todo_derived__unplanned
+                  value: planned
+                - field: fact_todos_todo_derived__repeat_semantic
+                  value: ""
+          yAxisIndex: 0
+        - type: bar
+          label:
+            show: true
+            position: inside
+          stack: dim_statuses_status_desc_count_of_status_desc
+          encode:
+            xRef:
+              field: dumm
+            yRef:
+              field: dim_statuses_status_desc_count_of_status_desc
+              pivotValues:
+                - field: dim_statuses_status_desc
+                  value: undone
+                - field: fact_todos_todo_derived__unplanned
+                  value: unplanned
+                - field: fact_todos_todo_derived__repeat_semantic
+                  value: ""
+          yAxisIndex: 0
+slug: count-of-tasks-by-status-today
+tableConfig:
+  columnOrder:
+    - dim_statuses_status_desc
+    - due_date_date_id_day
+    - dim_statuses_status_desc_count_of_status_desc
+    - dumm
+    - fact_todos_todo_derived__unplanned
+    - repeat_semantic
+    - repeat_semantic
+    - fact_todos_todo_derived__repeat_semantic
+spaceSlug: shared
+version: 1
+downloadedAt: "2025-05-10T00:53:13.277Z"

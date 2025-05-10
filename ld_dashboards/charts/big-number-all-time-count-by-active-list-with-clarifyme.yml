@@ -1,0 +1,114 @@
+name: big number - all time count by active list with clarifyme
+description: null
+tableName: fact_todos
+updatedAt: "2024-07-10T17:14:03.812Z"
+metricQuery:
+  exploreName: fact_todos
+  dimensions:
+    - fact_todos_todo_derived__tag_semantic
+    - dim_lists_list_name
+  metrics:
+    - fact_todos_all_time_inbox
+    - dim_lists_list_name_count_distinct_of_list_name
+  filters:
+    metrics:
+      id: 6d8dd64b-082b-411c-8668-cf57a4a2b177
+      and:
+        - id: 134be647-e0b1-4b3a-8fe6-1165ce74b618
+          target:
+            fieldId: fact_todos_all_time_inbox
+          values:
+            - 0
+          operator: greaterThan
+    dimensions:
+      id: 3c6ab752-3fc2-445c-bb90-af5268ec2e6f
+      and:
+        - id: 3150e4aa-9c00-4408-b4e7-07dc5c877b8a
+          target:
+            fieldId: fact_todos_todo_derived__tag_semantic
+          values:
+            - inbox
+          operator: equals
+          required: false
+        - id: 400b3c6c-0728-415c-9172-2131280778e9
+          target:
+            fieldId: dim_folders_folder_name
+          values:
+            - 🎯lvl2 - Joons
+          operator: notEquals
+          required: false
+        - id: c7360f48-acb6-45de-95a3-2326878caa56
+          target:
+            fieldId: dim_lists_list_isactive
+          values:
+            - true
+          operator: equals
+          required: false
+  sorts:
+    - fieldId: fact_todos_all_time_inbox
+      descending: true
+  limit: 500
+  tableCalculations:
+    - name: dummy
+      displayName: dummy
+      sql: "' '"
+      format:
+        type: default
+        currency: USD
+        separator: default
+      type: string
+    - name: lists_to_go_1
+      displayName: lists to go
+      sql: >-
+        count(${dim_lists.list_name_count_distinct_of_list_name}) over(partition
+        by ${fact_todos.todo_derived__tag_semantic})
+      format:
+        type: default
+        currency: USD
+        separator: default
+      type: number
+  additionalMetrics:
+    - name: status_desc_count_of_status_desc
+      label: Count of Status desc
+      description: "Count of Status desc on the table Dim statuses "
+      uuid: a64e090e-2171-4993-be1c-34758d8a7b5c
+      sql: ${TABLE}.status_desc
+      table: dim_statuses
+      type: count
+      baseDimensionName: status_desc
+      formatOptions:
+        type: default
+        separator: default
+    - name: list_name_count_distinct_of_list_name
+      label: Count distinct of List name
+      description: "Count distinct of List name on the table Dim lists "
+      uuid: 8fc6f07d-e0d6-4f9d-ae61-c4946b78a9a7
+      sql: ${TABLE}.list_name
+      table: dim_lists
+      type: count_distinct
+      baseDimensionName: list_name
+      formatOptions:
+        type: default
+        separator: default
+  customDimensions: []
+chartConfig:
+  type: big_number
+  config:
+    label: lists to go
+    flipColors: false
+    selectedField: lists_to_go_1
+    showComparison: false
+    comparisonFormat: raw
+    showBigNumberLabel: true
+slug: big-number-all-time-count-by-active-list-with-clarifyme
+tableConfig:
+  columnOrder:
+    - fact_todos_todo_derived__tag_semantic
+    - dim_lists_list_name
+    - dummy
+    - fact_todos_all_time_inbox
+    - lists_to_go_1
+    - dim_lists_list_name_count_distinct_of_list_name
+spaceSlug: shared
+version: 1
+downloadedAt: "2025-05-10T00:53:13.277Z"

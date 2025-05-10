@@ -1,0 +1,183 @@
+name: what have you done?
+description: ""
+tableName: fact_todos
+updatedAt: "2025-01-11T22:18:14.993Z"
+metricQuery:
+  exploreName: fact_todos
+  dimensions:
+    - list
+    - completed_date_day_name
+    - status
+    - completed_date_date_id_day
+    - _1_title
+  metrics:
+    - fact_todos_done_count__semantic_clarification
+    - fact_todos_done_count__semantic_deep_work
+    - fact_todos_todo_modifiedtime_raw_max_of_todo_modifiedtime_raw
+    - dim_folders_folder_name_max_of_folder_name
+  filters:
+    dimensions:
+      id: 682a724c-d3a8-4dc6-9f23-c6368f6689f4
+      and:
+        - id: 5b2e488a-8f71-45ec-8374-febe1aad68eb
+          target:
+            fieldId: completed_date_date_id_day
+          values:
+            - 1
+          operator: inThePast
+          required: false
+          settings:
+            completed: false
+            unitOfTime: days
+        - id: c54858c9-f3bf-4f40-9dbc-f1a1d3e077ee
+          target:
+            fieldId: dim_statuses_status_desc
+          values:
+            - done
+            - wont do
+          operator: equals
+          required: false
+        - id: 0877820b-a6a7-4d32-a836-839587ff5acc
+          target:
+            fieldId: fact_todos_todo_derived__tag_semantic
+          values:
+            - tickler
+          operator: notEquals
+          required: false
+  sorts:
+    - fieldId: completed_date_date_id_day
+      descending: true
+    - fieldId: fact_todos_todo_modifiedtime_raw_max_of_todo_modifiedtime_raw
+      descending: true
+  limit: 500
+  tableCalculations:
+    - name: deep_work_1
+      displayName: deep work
+      sql: >-
+        case when ${fact_todos.done_count__semantic_clarification} >
+        ${fact_todos.done_count__semantic_deep_work} and
+        ${dim_folders.folder_name_max_of_folder_name} is not null then '💼🧃' 
+
+
+        when ${fact_todos.done_count__semantic_clarification} >
+        ${fact_todos.done_count__semantic_deep_work} and
+        ${dim_folders.folder_name_max_of_folder_name} is null then '🧃' 
+
+
+        when ${fact_todos.done_count__semantic_clarification} <
+        ${fact_todos.done_count__semantic_deep_work} and
+        ${dim_folders.folder_name_max_of_folder_name} is not null then '💼🥩'
+
+
+        when ${fact_todos.done_count__semantic_clarification} <
+        ${fact_todos.done_count__semantic_deep_work} and
+        ${dim_folders.folder_name_max_of_folder_name} is null then '🥩'
+
+
+
+        end
+      format:
+        type: default
+        currency: USD
+        separator: default
+      type: string
+  additionalMetrics:
+    - name: folder_name_max_of_folder_name
+      label: Max of Folder name
+      description: >-
+        Max of Max of Folder name on the table Dim folders with filters
+        dim_folders.folder_name
+      uuid: 0eff999f-f0fa-4fd1-91c3-8960414525f2
+      sql: ${TABLE}.folder_name
+      table: dim_folders
+      type: max
+      baseDimensionName: folder_name
+      filters:
+        - id: ab6faba8-c96c-4557-9a57-08c5a1425800
+          target:
+            fieldRef: dim_folders.folder_name
+          values:
+            - 🎯lvl2 - Joons
+          operator: equals
+      formatOptions:
+        type: default
+        separator: default
+    - name: todo_modifiedtime_raw_max_of_todo_modifiedtime_raw
+      label: Max of Todo modifiedtime raw
+      description: "Max of Todo modifiedtime raw on the table Fact todos "
+      uuid: 41769741-3da4-4f7e-ade8-2deffdb0adea
+      sql: ${TABLE}.todo_modifiedtime
+      table: fact_todos
+      type: max
+      baseDimensionName: todo_modifiedtime_raw
+      formatOptions:
+        type: timestamp
+        timeInterval: RAW
+  customDimensions:
+    - id: status
+      name: status
+      type: sql
+      table: dim_statuses
+      sql: >-
+        case when ${dim_statuses.status_desc} = 'done' then '✅'  when
+        ${dim_statuses.status_desc} = 'wont do' then '❌'  end
+      dimensionType: string
+    - id: list
+      name: list
+      type: sql
+      table: dim_lists
+      sql: LEFT(${dim_lists.list_name},15)
+      dimensionType: string
+    - id: _1_title
+      name: (1) title
+      type: sql
+      table: fact_todos
+      sql: LEFT(${fact_todos.todo_title},35)
+      dimensionType: string
+chartConfig:
+  type: table
+  config:
+    columns:
+      status:
+        name: " "
+        visible: true
+      deep_work_1:
+        name: " "
+      completed_date_day_name:
+        name: day
+      fact_todos_done_count__semantic_deep_work:
+        visible: false
+      dim_folders_folder_name_max_of_folder_name:
+        visible: false
+      fact_todos_done_count__semantic_clarification:
+        visible: false
+      fact_todos_todo_modifiedtime_raw_max_of_todo_modifiedtime_raw:
+        visible: false
+    metricsAsRows: false
+    showSubtotals: false
+    hideRowNumbers: true
+    showTableNames: false
+    showResultsTotal: false
+    showRowCalculation: false
+    showColumnCalculation: false
+    conditionalFormattings: []
+dashboardSlug: gtd-dash-0-3
+slug: what-have-you-done-1736659094992
+tableConfig:
+  columnOrder:
+    - list
+    - list
+    - completed_date_day_name
+    - status
+    - status
+    - completed_date_date_id_day
+    - deep_work_1
+    - fact_todos_done_count__semantic_clarification
+    - fact_todos_done_count__semantic_deep_work
+    - fact_todos_todo_modifiedtime_raw_max_of_todo_modifiedtime_raw
+    - dim_folders_folder_name_max_of_folder_name
+    - _1_title
+    - (1) title
+spaceSlug: shared
+version: 1
+downloadedAt: "2025-05-10T00:53:13.277Z"

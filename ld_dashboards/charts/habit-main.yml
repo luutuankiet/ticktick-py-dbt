@@ -1,0 +1,86 @@
+name: habit main
+description: null
+tableName: fact_todos
+updatedAt: "2025-05-09T17:15:35.450Z"
+metricQuery:
+  exploreName: fact_todos
+  dimensions:
+    - todo
+    - fact_todos_todo_done_total_attempts
+    - fact_todos_todo_done_max_streak
+    - fact_todos_todo_wontdo_bad_habit_flag
+    - fact_todos_habit_date_day
+    - fact_todos_habit_week
+    - fact_todos_habit_day
+  metrics:
+    - fact_todos_habit_pivot_wrapper
+  filters:
+    dimensions:
+      id: 664097e2-364b-4f7b-b7b5-1b28f72628bd
+      and:
+        - id: 52927974-93ab-47f5-b495-020d0ab86f6c
+          target:
+            fieldId: fact_todos_todo_habit_is_active
+          values:
+            - true
+          operator: equals
+          required: false
+        - id: cb17d92c-3079-4720-9274-88db96ebc27e
+          target:
+            fieldId: fact_todos_habit_date
+          values:
+            - 3
+          operator: inThePast
+          required: false
+          settings:
+            completed: false
+            unitOfTime: days
+  sorts:
+    - fieldId: fact_todos_habit_date_day
+      descending: true
+  limit: 500
+  metricOverrides: {}
+  tableCalculations: []
+  additionalMetrics: []
+  customDimensions:
+    - id: todo
+      name: todo
+      type: sql
+      table: fact_todos
+      sql: left(${fact_todos.todo_title},20)
+      dimensionType: string
+chartConfig:
+  type: table
+  config:
+    columns:
+      fact_todos_habit_pivot_wrapper:
+        name: " "
+      fact_todos_todo_done_max_streak:
+        name: max
+      fact_todos_todo_done_total_attempts:
+        name: attempts
+      fact_todos_todo_wontdo_bad_habit_flag:
+        name: flag
+    metricsAsRows: false
+    showSubtotals: false
+    hideRowNumbers: true
+    showTableNames: false
+    showResultsTotal: false
+    showRowCalculation: false
+    showColumnCalculation: false
+    conditionalFormattings: []
+slug: habit-main
+tableConfig:
+  columnOrder:
+    - todo
+    - todo
+    - fact_todos_todo_done_total_attempts
+    - fact_todos_todo_done_max_streak
+    - fact_todos_todo_wontdo_bad_habit_flag
+    - fact_todos_habit_date_day
+    - fact_todos_habit_week
+    - fact_todos_habit_pivot_wrapper
+    - fact_todos_habit_day
+spaceSlug: shared
+version: 1
+downloadedAt: "2025-05-10T00:53:13.277Z"

@@ -1,0 +1,98 @@
+name: today count of list
+description: null
+tableName: fact_todos
+updatedAt: "2024-07-10T05:48:40.723Z"
+metricQuery:
+  exploreName: fact_todos
+  dimensions:
+    - due_date_date_id_day
+    - dim_statuses_status_desc
+  metrics:
+    - dim_lists_list_name_count_distinct_of_list_name
+  filters:
+    dimensions:
+      id: df174e4a-9801-4c9b-9d93-0d5a1283b362
+      and:
+        - id: 9e3ad387-16c8-4397-ac66-9f03f1dd335c
+          target:
+            fieldId: due_date_date_id_day
+          values:
+            - 0
+          operator: inTheNext
+          required: false
+          settings:
+            completed: false
+            unitOfTime: days
+        - id: f66c34c8-6f89-4757-b2f7-dd71c436655a
+          target:
+            fieldId: fact_todos_lookahead_flag
+          values:
+            - true
+          operator: equals
+          required: false
+        - id: 912a705a-314d-4a0a-8e44-3741853c9655
+          target:
+            fieldId: dim_statuses_status_desc
+          values:
+            - undone
+          operator: equals
+          required: false
+  sorts:
+    - fieldId: due_date_date_id_day
+      descending: true
+  limit: 500
+  tableCalculations: []
+  additionalMetrics:
+    - name: status_desc_count_of_status_desc
+      label: Count of Status desc
+      description: "Count of Status desc on the table Dim statuses "
+      uuid: 7c49ddef-5d71-4cbd-a787-eb708b989de0
+      sql: ${TABLE}.status_desc
+      table: dim_statuses
+      type: count
+      baseDimensionName: status_desc
+      formatOptions:
+        type: default
+        separator: default
+    - name: todo_id_count_of_todo_id
+      label: Count of Todo id
+      description: "Count of Todo id on the table Fact todos "
+      uuid: aebee89a-f943-460b-a077-6d6d746948bf
+      sql: ${TABLE}.todo_id
+      table: fact_todos
+      type: count
+      baseDimensionName: todo_id
+      formatOptions:
+        type: default
+        separator: default
+    - name: list_name_count_distinct_of_list_name
+      label: Count distinct of List name
+      description: "Count distinct of List name on the table Dim lists "
+      uuid: 9f89d59e-dc80-4b93-b7f2-a643fd2a0467
+      sql: ${TABLE}.list_name
+      table: dim_lists
+      type: count_distinct
+      baseDimensionName: list_name
+      formatOptions:
+        type: default
+        separator: default
+  customDimensions: []
+chartConfig:
+  type: big_number
+  config:
+    label: lists to go
+    flipColors: true
+    selectedField: dim_lists_list_name_count_distinct_of_list_name
+    showComparison: false
+    comparisonLabel: vs yesterday
+    comparisonFormat: percentage
+    showBigNumberLabel: true
+slug: today-count-of-list
+tableConfig:
+  columnOrder:
+    - due_date_date_id_day
+    - dim_statuses_status_desc
+    - dim_lists_list_name_count_distinct_of_list_name
+spaceSlug: shared
+version: 1
+downloadedAt: "2025-05-10T00:53:13.277Z"
