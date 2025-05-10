@@ -229,10 +229,8 @@ models:
 
                 else 'unplanned' end        
             todo_derived__overdue:
-          description: |
-            tasks that are due compared to current date
-          meta:
-            dimension:
+              description: |
+                tasks that are due compared to current date
               label: overdue?
               groups:
                 - derived
@@ -430,15 +428,36 @@ models:
                   - wont do
                 - todo_derived__is_task: true
                 - todo_derived__tag_semantic: next action
+            habit_pivot_wrapper:
+              type: string
+              description: "wrapper for habit pivot"
+              sql: |
+                case when ${met_todo_wontdo_streak} > 0 then '❌'::text
+                when ${met_todo_done_streak} = 0 and ${met_todo_wontdo_streak} = 0 then '🟡'::text
+                when ${met_todo_done_streak} is null and ${met_todo_wontdo_streak} is null then ' '::text
+                when ${met_todo_done_streak} > 0 then '✅' || ' ' || ${met_todo_done_streak}::text
+                else ' '::text
+                end
 
 
       - name: todo_done_max_streak
         data_type: bigint
         description: ""
-
+        meta:
+          metrics:
+            met_todo_done_max_streak:
+              type: average
+          dimension:
+            type: number        
       - name: todo_done_total_attempts
         data_type: bigint
         description: ""
+        meta:
+          metrics:
+            met_todo_done_total_attempts:
+              type: average
+          dimension:
+            type: number
 
       - name: todo_wontdo_bad_habit_flag
         data_type: text
@@ -459,11 +478,22 @@ models:
       - name: todo_done_streak
         data_type: bigint
         description: ""
+        meta:
+          metrics:
+            met_todo_done_streak:
+              type: average
+          dimension:
+            type: number        
 
       - name: todo_wontdo_streak
         data_type: bigint
         description: ""
-
+        meta:
+          metrics:
+            met_todo_wontdo_streak:
+              type: average
+          dimension:
+            type: number
       - name: todo_done_habit_bucket_id
         data_type: bigint
         description: ""
