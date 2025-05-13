@@ -1,4 +1,5 @@
-[![slim_CI](https://github.com/luutuankiet/ticktick-py-dbt/actions/workflows/slim_CI.yml/badge.svg)](https://github.com/luutuankiet/ticktick-py-dbt/actions/workflows/slim_CI.yml)
+[![CI](https://github.com/luutuankiet/ticktick-py-dbt/actions/workflows/CI.yml/badge.svg)](https://github.com/luutuankiet/ticktick-py-dbt/actions/workflows/CI.yml)
+[![CD](https://github.com/luutuankiet/ticktick-py-dbt/actions/workflows/CD.yml/badge.svg)](https://github.com/luutuankiet/ticktick-py-dbt/actions/workflows/CD.yml)
 
 # Ticktick DBT models
 This is a set of base Ticktick data models designed to reflect the [GTD's horizon of focus](https://gettingthingsdone.com/2011/01/the-6-horizons-of-focus/). 
