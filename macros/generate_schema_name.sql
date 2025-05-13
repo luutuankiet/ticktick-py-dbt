@@ -3,6 +3,6 @@
     {%- if target.name == 'ci' -%}
         ci_gha
     {%- else -%}
-        {{ default_schema }}
+        {{ default_schema }}_{{ custom_schema_name | trim }}
     {%- endif -%}
 {%- endmacro %}
