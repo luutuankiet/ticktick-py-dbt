@@ -52,6 +52,9 @@ jobs:
 
 
     steps:
+      - name: Set var CI_SCHEMA
+        run: echo "CI_SCHEMA=PR_${{ github.event.number }}" >> $GITHUB_ENV
+    
       - uses: actions/checkout@v3
 
       - uses: ./.github/actions/setup-env
@@ -113,3 +116,8 @@ jobs:
           LIGHTDASH_URL: ${{ secrets.LIGHTDASH_URL }}      
           GOOGLE_APPLICATION_CREDENTIALS: '/tmp/googlecredentials.json'    
         run: lightdash deploy
+      - name: drop dbt CI schema
+        env: 
+          CI_SCHEMA: $CI_SCHEMA
+        run: dbt run-operation drop_ci_schema
+      
