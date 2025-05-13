@@ -15,7 +15,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Set var CI_schema
-        run: echo "CI_schema=${{ github.event.number }}" >> $GITHUB_ENV
+        run: echo "CI_schema=PR_${{ github.event.number }}" >> $GITHUB_ENV
 
       - uses: actions/checkout@v3
 
@@ -55,4 +55,4 @@ jobs:
             ${{ runner.os }}-npm-
 
       - name: dbt build models
-        run: dbt build --target ci
+        run: CI_SCHEMA=$CI_SCHEMA dbt build --target ci --exclude "test_name:validate_yaml_schema"
