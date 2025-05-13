@@ -12,42 +12,42 @@ env:
   TARGET_SCHEMA: prod
 
 jobs:
-  deploy_git:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    env:
-      SERVER_HOST_KEY: ${{ secrets.SERVER_HOST_KEY }}
-      CLIENT_SECRET_KEY: ${{ secrets.CLIENT_SECRET_KEY }}
-      HOSTNAME: ${{ secrets.HOSTNAME }}
-      SSH_PORT: ${{ secrets.SSH_PORT }}
-    steps:
-    - name: Set up SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "$SERVER_HOST_KEY" > ~/.ssh/known_hosts
-        chmod 600 ~/.ssh/known_hosts
-        echo "$CLIENT_SECRET_KEY" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
+  # deploy_git:
+  #   if: github.event.pull_request.merged == true
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     SERVER_HOST_KEY: ${{ secrets.SERVER_HOST_KEY }}
+  #     CLIENT_SECRET_KEY: ${{ secrets.CLIENT_SECRET_KEY }}
+  #     HOSTNAME: ${{ secrets.HOSTNAME }}
+  #     SSH_PORT: ${{ secrets.SSH_PORT }}
+  #   steps:
+  #   - name: Set up SSH
+  #     run: |
+  #       mkdir -p ~/.ssh
+  #       echo "$SERVER_HOST_KEY" > ~/.ssh/known_hosts
+  #       chmod 600 ~/.ssh/known_hosts
+  #       echo "$CLIENT_SECRET_KEY" > ~/.ssh/id_ed25519
+  #       chmod 600 ~/.ssh/id_ed25519
 
 
-    - name: Update Server
-      run: |
-        eval "$(ssh-agent -s)"
-        ssh-add ~/.ssh/id_ed25519
-        ssh -o StrictHostKeyChecking=no -o ForwardAgent=yes root@$HOSTNAME -p $SSH_PORT << 'EOF'
-          cd /workspaces/gtd_ETL
-          git pull origin main
-          git submodule update --init --remote --merge
-          . ./bootstrap_env.sh
-          . ./venv/bin/activate
-          pip install -r requirements.txt
-          dbt deps
-          make deploy
-        EOF
+  #   - name: Update Server
+  #     run: |
+  #       eval "$(ssh-agent -s)"
+  #       ssh-add ~/.ssh/id_ed25519
+  #       ssh -o StrictHostKeyChecking=no -o ForwardAgent=yes root@$HOSTNAME -p $SSH_PORT << 'EOF'
+  #         cd /workspaces/gtd_ETL
+  #         git pull origin main
+  #         git submodule update --init --remote --merge
+  #         . ./bootstrap_env.sh
+  #         . ./venv/bin/activate
+  #         pip install -r requirements.txt
+  #         dbt deps
+  #         make deploy
+  #       EOF
 
   deploy_lightdash:
     runs-on: ubuntu-latest
-    needs: deploy_git
+    # needs: deploy_git
       
 
 
