@@ -433,7 +433,7 @@ models:
               description: "wrapper for habit pivot"
               sql: |
                 case when ${met_todo_wontdo_streak} > 0 then '❌'::text
-                when ${met_todo_done_streak} = 0 and ${met_todo_wontdo_streak} = 0 then '🟡'::text
+                when ${met_todo_done_streak} = 0 and ${met_todo_wontdo_streak} = 0 then '⏺️'::text
                 when ${met_todo_done_streak} is null and ${met_todo_wontdo_streak} is null then ' '::text
                 when ${met_todo_done_streak} > 0 then '✅' || ' ' || ${met_todo_done_streak}::text
                 else ' '::text
