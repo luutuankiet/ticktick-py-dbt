@@ -118,6 +118,6 @@ jobs:
         run: lightdash deploy
       - name: drop dbt CI schema
         env: 
-          CI_SCHEMA: $CI_SCHEMA
+          CI_SCHEMA: ${{ env.CI_SCHEMA }}
         run: dbt run-operation drop_ci_schema
       

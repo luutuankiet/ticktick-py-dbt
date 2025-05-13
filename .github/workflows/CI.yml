@@ -54,4 +54,6 @@ jobs:
             ${{ runner.os }}-npm-
 
       - name: dbt build models
-        run: CI_SCHEMA=$CI_SCHEMA dbt build --target ci --exclude "validate_yaml_schema"
+        run: dbt build --target ci --exclude "validate_yaml_schema"
+        env: 
+          CI_SCHEMA: ${{ env.CI_SCHEMA }}

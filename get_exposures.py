@@ -21,7 +21,7 @@ GET_EXPLORE_DETAILS_ENDPOINT= BASE_URL + "/projects/{projectUuid}/explores/{{exp
 # parse dashboards
 
 
-latest_dashes = ["habit v2"]
+latest_dashes = ["GTD dash 0.4"]
 # latest_dashes = ["GTD dash 0.4"]
 dashboard_json = requests.get(GET_DASHBOARD_CODE_ENDPOINT, headers=HEADERS).json()
 target_dashes: list[dict] = [
@@ -79,3 +79,8 @@ with open('table.json', 'w') as f:
     json.dump(tables, f, indent=4)
 
 print(tables)
+
+
+
+
+# prune charts
