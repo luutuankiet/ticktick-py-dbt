@@ -18,7 +18,6 @@ todo_analytics:
       password: "{{env_var('DW_PASSWORD')}}"
       dbname: "{{env_var('DW_DBNAME')}}"
       schema: "ci"
-      # schema: "{{var('schema_name', 'ci')}}"
       sslmode: disable
       threads: 12
     prod:
