@@ -502,10 +502,6 @@ models:
         data_type: bigint
         description: ""
 
-      - name: todo_derived__is_repeat
-        data_type: boolean
-        description: ""
-
       - name: todo_createdtime
         description: ""
         meta:
@@ -850,3 +846,4 @@ models:
             groups: 
               - derived
             type: boolean
+            sql: coalesce(${TABLE}.todo_derived__is_repeat,false)
