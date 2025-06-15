@@ -22,3 +22,4 @@ package-lock.json
 package.json
 
 dbt_project/seeds/*
+dbt_internal_packages/

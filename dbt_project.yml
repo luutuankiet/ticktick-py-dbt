@@ -41,7 +41,7 @@ models:
         +tags: "core"
       metrics:
         +tags: "metrics"
-        enabled: false
+        enabled: False
 
 seeds:
   todo_analytics:

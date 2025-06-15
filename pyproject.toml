@@ -1,0 +1,15 @@
+[project]
+name = "ticktick-py-dbt"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dbt-core==1.9.1",
+    "dbt-postgres==1.9.0",
+    "dbt-py-wrap",
+    "ruamel-yaml>=0.18.10",
+]
+
+[tool.uv.sources]
+dbt-py-wrap = { git = "https://github.com/Bilbottom/dbt-py", rev = "v0.0.3" }
