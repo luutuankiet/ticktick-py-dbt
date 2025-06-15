@@ -120,4 +120,16 @@ jobs:
         env: 
           CI_SCHEMA: ${{ env.CI_SCHEMA }}
         run: dbt run-operation drop_ci_schema
-      
+  # deploy_dagster:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/github-script@v6
+  #     with:
+  #       # github-token: ${{ secrets.PAT_TOKEN }}
+  #       script: |
+  #         await github.rest.actions.createWorkflowDispatch({
+  #           owner: 'luutuankiet',
+  #           repo: 'scrape-ticktick',
+  #           workflow_id: 'helloworld.yml',
+  #           ref: 'feat/create_cd_dagster'
+  #         })    
